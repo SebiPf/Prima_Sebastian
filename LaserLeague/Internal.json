@@ -18,6 +18,86 @@
       }
     }
   },
+  "MeshCube|2021-10-13T12:30:29.595Z|66983": {
+    "ƒ.MeshCube": {
+      "idResource": "MeshCube|2021-10-13T12:30:29.595Z|66983",
+      "name": "Wall",
+      "type": "MeshCube"
+    }
+  },
+  "Material|2021-10-13T12:31:35.423Z|29400": {
+    "ƒ.Material": {
+      "name": "Blue",
+      "idResource": "Material|2021-10-13T12:31:35.423Z|29400",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0, 0, 1, 1]"
+        }
+      }
+    }
+  },
+  "MeshSphere|2021-10-13T12:45:52.666Z|16007": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2021-10-13T12:45:52.666Z|16007",
+      "name": "Agent",
+      "type": "MeshSphere",
+      "sectors": 8,
+      "stacks": 8
+    }
+  },
+  "Material|2021-10-13T12:45:57.551Z|83006": {
+    "ƒ.Material": {
+      "name": "Green",
+      "idResource": "Material|2021-10-13T12:45:57.551Z|83006",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0, 1, 0.03137254901960784, 1]"
+        }
+      }
+    }
+  },
+  "MeshSphere|2021-10-13T12:47:23.493Z|58500": {
+    "ƒ.MeshSphere": {
+      "idResource": "MeshSphere|2021-10-13T12:47:23.493Z|58500",
+      "name": "LaserBase",
+      "type": "MeshSphere",
+      "sectors": 8,
+      "stacks": 8
+    }
+  },
+  "Material|2021-10-13T12:48:35.705Z|41573": {
+    "ƒ.Material": {
+      "name": "Cyan",
+      "idResource": "Material|2021-10-13T12:48:35.705Z|41573",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0.00784313725490196, 0.807843137254902, 0.9490196078431372, 1]"
+        }
+      }
+    }
+  },
+  "MeshCube|2021-10-13T12:50:07.688Z|40752": {
+    "ƒ.MeshCube": {
+      "idResource": "MeshCube|2021-10-13T12:50:07.688Z|40752",
+      "name": "LaserBeam",
+      "type": "MeshCube"
+    }
+  },
+  "Material|2021-10-13T12:51:59.089Z|60677": {
+    "ƒ.Material": {
+      "name": "Purple",
+      "idResource": "Material|2021-10-13T12:51:59.089Z|60677",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[0.7333333333333333, 0, 1, 1]"
+        }
+      }
+    }
+  },
   "Graph|2021-10-13T12:20:20.596Z|97454": {
     "ƒ.Graph": {
       "name": "RootArena",
@@ -273,6 +353,20 @@
                     "idMaterial": "Material|2021-10-13T12:45:57.551Z|83006"
                   }
                 }
+              ],
+              "ComponentTransform": [
+                {
+                  "ƒ.ComponentTransform": {
+                    "local": {
+                      "translation": "[0, 0, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1, 1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
               ]
             },
             "children": []
@@ -307,7 +401,7 @@
                         "ƒ.ComponentMesh": {
                           "idMesh": "MeshSphere|2021-10-13T12:47:23.493Z|58500",
                           "pivot": {
-                            "translation": "[-5, 1, 0]",
+                            "translation": "[0, 1, 0]",
                             "rotation": "[0, 0, 0]",
                             "scaling": "[1, 1, 1]"
                           },
@@ -332,6 +426,20 @@
                             "active": true
                           },
                           "idMaterial": "Material|2021-10-13T12:48:35.705Z|41573"
+                        }
+                      }
+                    ],
+                    "ComponentTransform": [
+                      {
+                        "ƒ.ComponentTransform": {
+                          "local": {
+                            "translation": "[-2, 0, 0]",
+                            "rotation": "[0, 0, 0]",
+                            "scaling": "[1, 1, 1]"
+                          },
+                          "Component": {
+                            "active": true
+                          }
                         }
                       }
                     ]
@@ -389,13 +497,6 @@
       "type": "Graph"
     }
   },
-  "MeshCube|2021-10-13T12:30:29.595Z|66983": {
-    "ƒ.MeshCube": {
-      "idResource": "MeshCube|2021-10-13T12:30:29.595Z|66983",
-      "name": "Wall",
-      "type": "MeshCube"
-    }
-  },
   "Graph|2021-10-13T12:30:44.912Z|46095": {
     "ƒ.Graph": {
       "name": "WallGraph",
@@ -403,79 +504,6 @@
       "children": [],
       "idResource": "Graph|2021-10-13T12:30:44.912Z|46095",
       "type": "Graph"
-    }
-  },
-  "Material|2021-10-13T12:31:35.423Z|29400": {
-    "ƒ.Material": {
-      "name": "Blue",
-      "idResource": "Material|2021-10-13T12:31:35.423Z|29400",
-      "shader": "ShaderUniColor",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[0, 0, 1, 1]"
-        }
-      }
-    }
-  },
-  "MeshSphere|2021-10-13T12:45:52.666Z|16007": {
-    "ƒ.MeshSphere": {
-      "idResource": "MeshSphere|2021-10-13T12:45:52.666Z|16007",
-      "name": "Agent",
-      "type": "MeshSphere",
-      "sectors": 8,
-      "stacks": 8
-    }
-  },
-  "Material|2021-10-13T12:45:57.551Z|83006": {
-    "ƒ.Material": {
-      "name": "Green",
-      "idResource": "Material|2021-10-13T12:45:57.551Z|83006",
-      "shader": "ShaderUniColor",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[0, 1, 0.03137254901960784, 1]"
-        }
-      }
-    }
-  },
-  "MeshSphere|2021-10-13T12:47:23.493Z|58500": {
-    "ƒ.MeshSphere": {
-      "idResource": "MeshSphere|2021-10-13T12:47:23.493Z|58500",
-      "name": "LaserBase",
-      "type": "MeshSphere",
-      "sectors": 8,
-      "stacks": 8
-    }
-  },
-  "Material|2021-10-13T12:48:35.705Z|41573": {
-    "ƒ.Material": {
-      "name": "Cyan",
-      "idResource": "Material|2021-10-13T12:48:35.705Z|41573",
-      "shader": "ShaderUniColor",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[0.00784313725490196, 0.807843137254902, 0.9490196078431372, 1]"
-        }
-      }
-    }
-  },
-  "MeshCube|2021-10-13T12:50:07.688Z|40752": {
-    "ƒ.MeshCube": {
-      "idResource": "MeshCube|2021-10-13T12:50:07.688Z|40752",
-      "name": "LaserBeam",
-      "type": "MeshCube"
-    }
-  },
-  "Material|2021-10-13T12:51:59.089Z|60677": {
-    "ƒ.Material": {
-      "name": "Purple",
-      "idResource": "Material|2021-10-13T12:51:59.089Z|60677",
-      "shader": "ShaderUniColor",
-      "coat": {
-        "ƒ.CoatColored": {
-          "color": "[0.7333333333333333, 0, 1, 1]"
-        }
-      }
     }
   }
 }

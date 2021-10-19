@@ -326,7 +326,7 @@
                   "ƒ.ComponentMesh": {
                     "idMesh": "MeshSphere|2021-10-13T12:45:52.666Z|16007",
                     "pivot": {
-                      "translation": "[5, 1, 0]",
+                      "translation": "[0, 1, 0]",
                       "rotation": "[0, 0, 0]",
                       "scaling": "[0.5, 0.5, 0.5]"
                     },

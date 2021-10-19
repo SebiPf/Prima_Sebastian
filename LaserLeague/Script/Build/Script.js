@@ -68,6 +68,21 @@ var Script;
         }
     }
     function update(_event) {
+        let x = transform1.translation.x;
+        let z = transform1.translation.z;
+        //console.log("testttttt " + x)
+        if (x > 9) {
+            transform1.translateX(-18.5);
+        }
+        if (x < -9) {
+            transform1.translateX(18.5);
+        }
+        if (z > 6.5) {
+            transform1.translateZ(-13.5);
+        }
+        if (z < -6.5) {
+            transform1.translateZ(13.5);
+        }
         // ƒ.Physics.world.simulate();  // if physics is included and used
         //let lasercomp = laserbase.getComponent(ƒ.ComponentTransform).mtxLocal.rotateY(90);
         //console.log("output: " + graph);

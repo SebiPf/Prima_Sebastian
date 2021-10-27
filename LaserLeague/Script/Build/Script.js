@@ -47,7 +47,8 @@ var Script;
     let forward = new ƒ.Control("Forward", 10, 0 /* PROPORTIONAL */);
     forward.setDelay(300);
     let agenttransform;
-    function start(_event) {
+    let copy;
+    async function start(_event) {
         viewport = _event.detail;
         let graph = viewport.getBranch();
         laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
@@ -55,6 +56,11 @@ var Script;
         transform = laserbase.getComponent(ƒ.ComponentTransform).mtxLocal;
         //rotation = graph.getChildrenByName("LaserBeam")[0].mtxLocal;
         agenttransform = agent.getComponent(ƒ.ComponentTransform).mtxLocal;
+        let graphlaser = await ƒ.Project.registerAsGraph(laserbase, false);
+        copy = await ƒ.Project.createGraphInstance(graphlaser);
+        graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0].addChild(copy);
+        //copy.addComponent( new ƒ.ComponentTransform);
+        copy.mtxLocal.translateX(5);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 60); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -116,11 +122,17 @@ var Script;
         let beam = laserbase.getChildren()[0];
         let posLocal = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
         //console.log("check: " + posLocal.toString());
+        let radius = 0.5;
         console.log(agenttransform.translation.x);
-        if (posLocal.x > -5 && posLocal.x < 0 && posLocal.z < 0.5 && posLocal.z > -0.5) {
+        if (posLocal.x > (-5 - radius) && posLocal.x < (0 + radius) && posLocal.z < (0.25 + radius) && posLocal.z > (-0.25 - radius)) {
             console.log("Collision ");
-            agenttransform.translation.x = 5;
-            agent.mtxWorld.translation.x = 5;
+            //agenttransform.translation.x = 5;
+            agent.mtxLocal.translation = ƒ.Vector3.X(5);
+        }
+        if (posLocal.z > (-2.5 - radius) && posLocal.z < (2.5 + radius) && posLocal.x < (0.25 + radius) && posLocal.x > (-0.25 - radius)) {
+            console.log("Collision ");
+            //agenttransform.translation.x = 5;
+            agent.mtxLocal.translation = ƒ.Vector3.X(5);
         }
     }
 })(Script || (Script = {}));

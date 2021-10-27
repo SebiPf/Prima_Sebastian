@@ -4,7 +4,7 @@ namespace Script {
   //let speedagent: number = 1;
   
   let viewport: ƒ.Viewport;
-  document.addEventListener("interactiveViewportStarted", <EventListener>start);
+  document.addEventListener("interactiveViewportStarted", <any>start);
   
   //let rotation: ƒ.Matrix4x4;
   let rotatingspeed: number = 360;
@@ -14,7 +14,9 @@ namespace Script {
   let forward: ƒ.Control = new ƒ.Control("Forward", 10 , ƒ.CONTROL_TYPE.PROPORTIONAL)
   forward.setDelay(300);
   let agenttransform: ƒ.Matrix4x4;
-  function start(_event: CustomEvent): void {
+  let copy: ƒ.GraphInstance;
+
+  async function start(_event: CustomEvent): Promise<void> {
     viewport = _event.detail;
     
     
@@ -27,6 +29,14 @@ namespace Script {
     transform = laserbase.getComponent(ƒ.ComponentTransform).mtxLocal;
     //rotation = graph.getChildrenByName("LaserBeam")[0].mtxLocal;
     agenttransform = agent.getComponent(ƒ.ComponentTransform).mtxLocal;
+
+    let graphlaser: ƒ.Graph = await ƒ.Project.registerAsGraph(laserbase, false)
+    copy = await ƒ.Project.createGraphInstance(graphlaser);
+    graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0].addChild(copy);
+    //copy.addComponent( new ƒ.ComponentTransform);
+    copy.mtxLocal.translateX(5);
+
+
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 60);  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -91,6 +101,7 @@ namespace Script {
     // ƒ.Physics.world.simulate();  // if physics is included and used
     
     //console.log("output: " + graph);
+    
     checkCollision();
     viewport.draw();
     ƒ.AudioManager.default.update();
@@ -101,14 +112,21 @@ namespace Script {
     let beam: ƒ.Node = laserbase.getChildren()[0];
     let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
     //console.log("check: " + posLocal.toString());
+    let radius: number = 0.5;
+    
     console.log(agenttransform.translation.x);
-    if(posLocal.x > -5 && posLocal.x < 0 && posLocal.z < 0.5   && posLocal.z > -0.5  ){
+    if(posLocal.x > (-5 - radius)&& posLocal.x < (0+radius) && posLocal.z < (0.25+radius)   && posLocal.z > (-0.25- radius)  ){
       console.log("Collision ");
-      agenttransform.translation.x = 5;
-      agent.mtxWorld.translation.x = 5;
+      //agenttransform.translation.x = 5;
+      agent.mtxLocal.translation = ƒ.Vector3.X(5);
       
     }
-
+    if(posLocal.z > (-2.5 - radius)&& posLocal.z < (2.5+radius) && posLocal.x < (0.25+radius)   && posLocal.x > (-0.25- radius)  ){
+      console.log("Collision ");
+      //agenttransform.translation.x = 5;
+      agent.mtxLocal.translation = ƒ.Vector3.X(5);
+      
+    }
 
 
   }

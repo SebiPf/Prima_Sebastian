@@ -367,6 +367,14 @@
                     }
                   }
                 }
+              ],
+              "CustomComponentScript": [
+                {
+                  "Script.CustomComponentScript": {
+                    "active": true,
+                    "message": "CustomComponentScript added to "
+                  }
+                }
               ]
             },
             "children": []
@@ -456,6 +464,47 @@
                                 "pivot": {
                                   "translation": "[-2.5, 1, 0]",
                                   "rotation": "[0, 0, 0]",
+                                  "scaling": "[5, 0.5, 0.5]"
+                                },
+                                "Component": {
+                                  "active": true
+                                }
+                              }
+                            }
+                          ],
+                          "ComponentMaterial": [
+                            {
+                              "ƒ.ComponentMaterial": {
+                                "sortForAlpha": false,
+                                "clrPrimary": "[1, 1, 1, 1]",
+                                "clrSecondary": "[1, 1, 1, 1]",
+                                "pivot": {
+                                  "translation": "[0, 0]",
+                                  "rotation": 0,
+                                  "scaling": "[1, 1]"
+                                },
+                                "Component": {
+                                  "active": true
+                                },
+                                "idMaterial": "Material|2021-10-13T12:51:59.089Z|60677"
+                              }
+                            }
+                          ]
+                        },
+                        "children": []
+                      }
+                    },
+                    {
+                      "ƒ.Node": {
+                        "name": "LaserBeam",
+                        "components": {
+                          "ComponentMesh": [
+                            {
+                              "ƒ.ComponentMesh": {
+                                "idMesh": "MeshCube|2021-10-13T12:50:07.688Z|40752",
+                                "pivot": {
+                                  "translation": "[0, 1, 0]",
+                                  "rotation": "[0, 90, 0]",
                                   "scaling": "[5, 0.5, 0.5]"
                                 },
                                 "Component": {

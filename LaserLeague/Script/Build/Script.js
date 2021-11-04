@@ -1,24 +1,44 @@
 "use strict";
-var Script;
-(function (Script) {
+var LaserLeague;
+(function (LaserLeague) {
     var ƒ = FudgeCore;
-    ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
+    class Agent extends ƒ.Node {
+        constructor() {
+            super("Agent");
+            this.addComponent(new ƒ.ComponentTransform);
+            this.addComponent(new ƒ.ComponentMesh(new ƒ.MeshSphere("agentmesh")));
+            this.addComponent(new ƒ.ComponentMaterial(new ƒ.Material("agentmaterial", ƒ.ShaderUniColor, new ƒ.CoatColored(new ƒ.Color(1, 0.84, 0, 1)))));
+            this.mtxLocal.scale(ƒ.Vector3.ONE(.5));
+            this.mtxLocal.translateY(5);
+            console.log("testtest");
+        }
+    }
+    LaserLeague.Agent = Agent;
+})(LaserLeague || (LaserLeague = {}));
+var LaserLeague;
+(function (LaserLeague) {
+    var ƒ = FudgeCore;
+    ƒ.Project.registerScriptNamespace(LaserLeague); // Register the namespace to FUDGE for serialization
     class CustomComponentScript extends ƒ.ComponentScript {
         constructor() {
             super();
             // Properties may be mutated by users in the editor via the automatically created user interface
-            this.message = "CustomComponentScript added to ";
+            this.rotSpeed = 60;
             // Activate the functions of this component as response to events
             this.hndEvent = (_event) => {
                 switch (_event.type) {
                     case "componentAdd" /* COMPONENT_ADD */:
-                        ƒ.Debug.log(this.message, this.node);
+                        //ƒ.Debug.log(this.message, this.node);
+                        ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, this.update);
                         break;
                     case "componentRemove" /* COMPONENT_REMOVE */:
                         this.removeEventListener("componentAdd" /* COMPONENT_ADD */, this.hndEvent);
                         this.removeEventListener("componentRemove" /* COMPONENT_REMOVE */, this.hndEvent);
                         break;
                 }
+            };
+            this.update = (_event) => {
+                this.node.mtxLocal.rotateZ(this.rotSpeed * ƒ.Loop.timeFrameGame / 1000);
             };
             // Don't start when running in editor
             if (ƒ.Project.mode == ƒ.MODE.EDITOR)
@@ -30,10 +50,10 @@ var Script;
     }
     // Register the script as component for use in the editor via drag&drop
     CustomComponentScript.iSubclass = ƒ.Component.registerSubclass(CustomComponentScript);
-    Script.CustomComponentScript = CustomComponentScript;
-})(Script || (Script = {}));
-var Script;
-(function (Script) {
+    LaserLeague.CustomComponentScript = CustomComponentScript;
+})(LaserLeague || (LaserLeague = {}));
+var LaserLeague;
+(function (LaserLeague) {
     var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
     //let speedagent: number = 1;
@@ -41,26 +61,34 @@ var Script;
     document.addEventListener("interactiveViewportStarted", start);
     //let rotation: ƒ.Matrix4x4;
     let rotatingspeed = 360;
-    let transform;
+    //let transform: ƒ.Matrix4x4;
     let agent;
-    let laserbase;
+    //let laserbase: ƒ.Node;
     let forward = new ƒ.Control("Forward", 10, 0 /* PROPORTIONAL */);
     forward.setDelay(300);
     let agenttransform;
     let copy;
+    //let i: number = 0
+    //let j: number = 0
+    let LaserStruckture;
+    //let graph: ƒ.Node;
     async function start(_event) {
         viewport = _event.detail;
         let graph = viewport.getBranch();
-        laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
-        agent = graph.getChildrenByName("Agent")[0];
-        transform = laserbase.getComponent(ƒ.ComponentTransform).mtxLocal;
+        //laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
+        //agent = graph.getChildrenByName("Agent")[0];
+        agent = new LaserLeague.Agent();
+        //transform = laserbase.mtxLocal;
+        graph.getChildrenByName("Agent")[0].addChild(agent);
         //rotation = graph.getChildrenByName("LaserBeam")[0].mtxLocal;
         agenttransform = agent.getComponent(ƒ.ComponentTransform).mtxLocal;
-        let graphlaser = await ƒ.Project.registerAsGraph(laserbase, false);
-        copy = await ƒ.Project.createGraphInstance(graphlaser);
-        graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0].addChild(copy);
+        let graphlaser = FudgeCore.Project.resources["Graph|2021-11-02T12:13:30.025Z|22534"];
+        LaserStruckture = graph.getChildrenByName("LaserStrukture")[0];
+        //graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
         //copy.addComponent( new ƒ.ComponentTransform);
-        copy.mtxLocal.translateX(5);
+        //copy.mtxLocal.translateX(10);
+        copy = await ƒ.Project.createGraphInstance(graphlaser);
+        graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 60); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -85,7 +113,7 @@ var Script;
     function update(_event) {
         let deltatime = ƒ.Loop.timeFrameReal / 1000;
         let turnagent = 360;
-        transform.rotateY(rotatingspeed * deltatime);
+        copy.mtxLocal.rotateY(rotatingspeed * deltatime);
         let value = (ƒ.Keyboard.mapToValue(-1, 0, [ƒ.KEYBOARD_CODE.S, ƒ.KEYBOARD_CODE.ARROW_DOWN])
             + ƒ.Keyboard.mapToValue(1, 0, [ƒ.KEYBOARD_CODE.W, ƒ.KEYBOARD_CODE.ARROW_UP]));
         forward.setInput(value * deltatime);
@@ -97,7 +125,7 @@ var Script;
             agenttransform.rotateY(-turnagent * deltatime);
         }
         /* let x = agenttransform.translation.x;
-   
+    
        let z = agenttransform.translation.z;
        //console.log("testttttt " + x)
        if(x > 9){
@@ -119,21 +147,21 @@ var Script;
         ƒ.AudioManager.default.update();
     }
     function checkCollision() {
-        let beam = laserbase.getChildren()[0];
-        let posLocal = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
         //console.log("check: " + posLocal.toString());
-        let radius = 0.5;
-        console.log(agenttransform.translation.x);
+        let radius = 0.25;
+        let beam = LaserStruckture.getChildren()[0];
+        let posLocal = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
         if (posLocal.x > (-5 - radius) && posLocal.x < (0 + radius) && posLocal.z < (0.25 + radius) && posLocal.z > (-0.25 - radius)) {
             console.log("Collision ");
             //agenttransform.translation.x = 5;
-            agent.mtxLocal.translation = ƒ.Vector3.X(5);
+            agent.mtxLocal.translation = ƒ.Vector3.X(6);
         }
         if (posLocal.z > (-2.5 - radius) && posLocal.z < (2.5 + radius) && posLocal.x < (0.25 + radius) && posLocal.x > (-0.25 - radius)) {
             console.log("Collision ");
             //agenttransform.translation.x = 5;
-            agent.mtxLocal.translation = ƒ.Vector3.X(5);
+            agent.mtxLocal.translation = ƒ.Vector3.X(6);
         }
+        //console.log(agenttransform.translation.x);
     }
-})(Script || (Script = {}));
+})(LaserLeague || (LaserLeague = {}));
 //# sourceMappingURL=Script.js.map

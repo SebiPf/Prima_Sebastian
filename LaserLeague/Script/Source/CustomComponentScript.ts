@@ -1,12 +1,12 @@
-namespace Script {
+namespace LaserLeague {
   import ƒ = FudgeCore;
-  ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
+  ƒ.Project.registerScriptNamespace(LaserLeague);  // Register the namespace to FUDGE for serialization
 
   export class CustomComponentScript extends ƒ.ComponentScript {
     // Register the script as component for use in the editor via drag&drop
     public static readonly iSubclass: number = ƒ.Component.registerSubclass(CustomComponentScript);
     // Properties may be mutated by users in the editor via the automatically created user interface
-    public message: string = "CustomComponentScript added to ";
+    public rotSpeed: number = 60;
 
 
     constructor() {
@@ -25,7 +25,8 @@ namespace Script {
     public hndEvent = (_event: Event) => {
       switch (_event.type) {
         case ƒ.EVENT.COMPONENT_ADD:
-          ƒ.Debug.log(this.message, this.node);
+          //ƒ.Debug.log(this.message, this.node);
+          ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.update);
           break;
         case ƒ.EVENT.COMPONENT_REMOVE:
           this.removeEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
@@ -33,7 +34,9 @@ namespace Script {
           break;
       }
     }
-
+    public update = (_event: Event): void => {
+      this.node.mtxLocal.rotateZ(this.rotSpeed * ƒ.Loop.timeFrameGame / 1000);
+    }
     // protected reduceMutator(_mutator: ƒ.Mutator): void {
     //   // delete properties that should not be mutated
     //   // undefined properties and private fields (#) will not be included by default

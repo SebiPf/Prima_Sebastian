@@ -98,10 +98,45 @@
       }
     }
   },
+  "Audio|2021-11-10T18:05:28.305Z|68990": {
+    "ƒ.Audio": {
+      "url": "Sound\\Boss.wav",
+      "idResource": "Audio|2021-11-10T18:05:28.305Z|68990",
+      "name": "Sound\\Boss.wav",
+      "type": "Audio"
+    }
+  },
+  "Audio|2021-11-10T18:25:49.746Z|21621": {
+    "ƒ.Audio": {
+      "url": "Sound\\LaserSound.mp3",
+      "idResource": "Audio|2021-11-10T18:25:49.746Z|21621",
+      "name": "Sound\\LaserSound.mp3",
+      "type": "Audio"
+    }
+  },
   "Graph|2021-10-13T12:20:20.596Z|97454": {
     "ƒ.Graph": {
       "name": "RootArena",
-      "components": {},
+      "components": {
+        "ComponentAudio": [
+          {
+            "ƒ.ComponentAudio": {
+              "active": true,
+              "idResource": "Audio|2021-11-10T18:05:28.305Z|68990",
+              "playing": true,
+              "loop": true,
+              "volume": 1
+            }
+          }
+        ],
+        "ComponentAudioListener": [
+          {
+            "ƒ.ComponentAudioListener": {
+              "active": true
+            }
+          }
+        ]
+      },
       "children": [
         {
           "ƒ.Node": {
@@ -342,7 +377,26 @@
         {
           "ƒ.Node": {
             "name": "Agent",
-            "components": {},
+            "components": {
+              "ComponentAudioListener": [
+                {
+                  "ƒ.ComponentAudioListener": {
+                    "active": true
+                  }
+                }
+              ],
+              "ComponentAudio": [
+                {
+                  "ƒ.ComponentAudio": {
+                    "active": true,
+                    "idResource": "Audio|2021-11-10T18:25:49.746Z|21621",
+                    "playing": false,
+                    "loop": true,
+                    "volume": 1
+                  }
+                }
+              ]
+            },
             "children": []
           }
         }

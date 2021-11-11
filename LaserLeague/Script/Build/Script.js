@@ -8,8 +8,10 @@ var LaserLeague;
             this.addComponent(new ƒ.ComponentTransform);
             this.addComponent(new ƒ.ComponentMesh(new ƒ.MeshSphere("agentmesh")));
             this.addComponent(new ƒ.ComponentMaterial(new ƒ.Material("agentmaterial", ƒ.ShaderUniColor, new ƒ.CoatColored(new ƒ.Color(1, 0.84, 0, 1)))));
+            this.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("Sound/LaserSound.mp3"), false, false));
+            //this.addComponent(new ƒ.ComponentAudioListener)
             this.mtxLocal.scale(ƒ.Vector3.ONE(.5));
-            this.mtxLocal.translateY(5);
+            this.mtxLocal.translateY(0.5);
             console.log("testtest");
         }
     }
@@ -55,6 +57,27 @@ var LaserLeague;
 var LaserLeague;
 (function (LaserLeague) {
     var ƒ = FudgeCore;
+    var ƒui = FudgeUserInterface;
+    class GameState extends ƒ.Mutable {
+        constructor() {
+            super();
+            this.name = "LaserLeague";
+            this.health = 1;
+            let domHud = document.querySelector("#Hud");
+            GameState.instance = this;
+            GameState.controller = new ƒui.Controller(this, domHud);
+            console.log("Hud-Controller", GameState.controller);
+        }
+        static get() {
+            return GameState.instance || new GameState();
+        }
+        reduceMutator(_mutator) { }
+    }
+    LaserLeague.GameState = GameState;
+})(LaserLeague || (LaserLeague = {}));
+var LaserLeague;
+(function (LaserLeague) {
+    var ƒ = FudgeCore;
     ƒ.Debug.info("Main Program Template running!");
     //let speedagent: number = 1;
     let viewport;
@@ -68,6 +91,7 @@ var LaserLeague;
     forward.setDelay(300);
     let agenttransform;
     let copy;
+    //let soundcoll: boolean;
     //let i: number = 0
     //let j: number = 0
     let LaserStruckture;
@@ -80,6 +104,7 @@ var LaserLeague;
         agent = new LaserLeague.Agent();
         //transform = laserbase.mtxLocal;
         graph.getChildrenByName("Agent")[0].addChild(agent);
+        //soundcoll= graph.getComponent(ƒ.ComponentAudio).isPlaying;
         //rotation = graph.getChildrenByName("LaserBeam")[0].mtxLocal;
         agenttransform = agent.getComponent(ƒ.ComponentTransform).mtxLocal;
         let graphlaser = FudgeCore.Project.resources["Graph|2021-11-02T12:13:30.025Z|22534"];
@@ -89,6 +114,7 @@ var LaserLeague;
         //copy.mtxLocal.translateX(10);
         copy = await ƒ.Project.createGraphInstance(graphlaser);
         graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
+        agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
         ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 60); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
@@ -142,9 +168,10 @@ var LaserLeague;
        }  */
         // ƒ.Physics.world.simulate();  // if physics is included and used
         //console.log("output: " + graph);
-        checkCollision();
         viewport.draw();
+        checkCollision();
         ƒ.AudioManager.default.update();
+        LaserLeague.GameState.get().health -= 0.01;
     }
     function checkCollision() {
         //console.log("check: " + posLocal.toString());
@@ -154,12 +181,18 @@ var LaserLeague;
         if (posLocal.x > (-5 - radius) && posLocal.x < (0 + radius) && posLocal.z < (0.25 + radius) && posLocal.z > (-0.25 - radius)) {
             console.log("Collision ");
             //agenttransform.translation.x = 5;
-            agent.mtxLocal.translation = ƒ.Vector3.X(6);
+            agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
+            //agent. = true;
         }
         if (posLocal.z > (-2.5 - radius) && posLocal.z < (2.5 + radius) && posLocal.x < (0.25 + radius) && posLocal.x > (-0.25 - radius)) {
             console.log("Collision ");
             //agenttransform.translation.x = 5;
-            agent.mtxLocal.translation = ƒ.Vector3.X(6);
+            agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
+            //agent.ComponentAudio[0].playing = true;
+            //agent.playing = true;
+        }
+        else {
+            //agent.playing = false;
         }
         //console.log(agenttransform.translation.x);
     }

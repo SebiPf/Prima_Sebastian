@@ -15,4 +15,16 @@ declare namespace LaserLeague {
     }
 }
 declare namespace LaserLeague {
+    import ƒ = FudgeCore;
+    class GameState extends ƒ.Mutable {
+        private static controller;
+        private static instance;
+        name: string;
+        health: number;
+        private constructor();
+        static get(): GameState;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
+    }
+}
+declare namespace LaserLeague {
 }

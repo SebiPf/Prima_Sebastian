@@ -1,6 +1,6 @@
 namespace LaserLeague {
   import ƒ = FudgeCore;
-  
+
   ƒ.Debug.info("Main Program Template running!");
   //let speedagent: number = 1;
 
@@ -17,9 +17,10 @@ namespace LaserLeague {
   forward.setDelay(300);
   let agenttransform: ƒ.Matrix4x4;
   let copy: ƒ.GraphInstance;
+  //let soundcoll: boolean;
   //let i: number = 0
   //let j: number = 0
-  
+
   let LaserStruckture: ƒ.Node
   //let graph: ƒ.Node;
   async function start(_event: CustomEvent): Promise<void> {
@@ -28,14 +29,18 @@ namespace LaserLeague {
 
 
 
-
     let graph: ƒ.Node = viewport.getBranch();
-    
+
     //laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
     //agent = graph.getChildrenByName("Agent")[0];
     agent = new Agent();
+
     //transform = laserbase.mtxLocal;
     graph.getChildrenByName("Agent")[0].addChild(agent);
+
+    //soundcoll= graph.getComponent(ƒ.ComponentAudio).isPlaying;
+
+
     //rotation = graph.getChildrenByName("LaserBeam")[0].mtxLocal;
     agenttransform = agent.getComponent(ƒ.ComponentTransform).mtxLocal;
 
@@ -46,12 +51,14 @@ namespace LaserLeague {
     //graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
     //copy.addComponent( new ƒ.ComponentTransform);
     //copy.mtxLocal.translateX(10);
-    
-    
-        copy = await ƒ.Project.createGraphInstance(graphlaser);
-        graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
-        
-    
+
+
+    copy = await ƒ.Project.createGraphInstance(graphlaser);
+    graph.getChildrenByName("LaserStrukture")[0].addChild(copy);
+    agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
+
+
+
 
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
     ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 60);  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
@@ -116,42 +123,49 @@ namespace LaserLeague {
     // ƒ.Physics.world.simulate();  // if physics is included and used
 
     //console.log("output: " + graph);
-
-    checkCollision();
     viewport.draw();
+    checkCollision();
     ƒ.AudioManager.default.update();
+
+    GameState.get().health -= 0.01;
+
   }
 
 
   function checkCollision(): void {
 
-    
-    
+
+
     //console.log("check: " + posLocal.toString());
     let radius: number = 0.25;
-    
-      let beam: ƒ.Node = LaserStruckture.getChildren()[0];
-      
-      let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
-      if (posLocal.x > (-5 - radius) && posLocal.x < (0 + radius) && posLocal.z < (0.25 + radius) && posLocal.z > (-0.25 - radius)) {
-        console.log("Collision ");
-        //agenttransform.translation.x = 5;
-        agent.mtxLocal.translation = ƒ.Vector3.X(6);
-  
-      }
-      if (posLocal.z > (-2.5 - radius) && posLocal.z < (2.5 + radius) && posLocal.x < (0.25 + radius) && posLocal.x > (-0.25 - radius)) {
-        console.log("Collision ");
-        //agenttransform.translation.x = 5;
-        agent.mtxLocal.translation = ƒ.Vector3.X(6);
-  
-      }
 
-      
-    
-    
+    let beam: ƒ.Node = LaserStruckture.getChildren()[0];
+
+    let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(agent.mtxWorld.translation, beam.mtxWorldInverse, true);
+    if (posLocal.x > (-5 - radius) && posLocal.x < (0 + radius) && posLocal.z < (0.25 + radius) && posLocal.z > (-0.25 - radius)) {
+      console.log("Collision ");
+      //agenttransform.translation.x = 5;
+      agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
+      //agent. = true;
+
+    }
+    if (posLocal.z > (-2.5 - radius) && posLocal.z < (2.5 + radius) && posLocal.x < (0.25 + radius) && posLocal.x > (-0.25 - radius)) {
+      console.log("Collision ");
+      //agenttransform.translation.x = 5;
+      agent.mtxLocal.translation = new ƒ.Vector3(6, 1, 0);
+      //agent.ComponentAudio[0].playing = true;
+      //agent.playing = true;
+    }
+    else {
+      //agent.playing = false;
+    }
+
+
+
+
 
     //console.log(agenttransform.translation.x);
-    
+
 
 
   }

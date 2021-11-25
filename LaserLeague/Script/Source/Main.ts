@@ -5,32 +5,55 @@ namespace LaserLeague {
   //let speedagent: number = 1;
 
   let viewport: ƒ.Viewport;
-  document.addEventListener("interactiveViewportStarted", <any>start);
+  let rotatingspeed: number = 360;
+  let copy: ƒ.GraphInstance;
+  let agent: Agent;
+  let agenttransform: ƒ.Matrix4x4;
+  let LaserStruckture: ƒ.Node
+  let forward: ƒ.Control = new ƒ.Control("Forward", 10, ƒ.CONTROL_TYPE.PROPORTIONAL)
+  //document.addEventListener("interactiveViewportStarted", <any>start);
+window.addEventListener("load",start);
+async function start(_enent: Event): Promise<void> {
+  await ƒ.Project.loadResourcesFromHTML();
+  let graph: any = ƒ.Project.resources["Graph|2021-10-13T12:20:20.596Z|97454"];
+  let cmpCamera = new ƒ.ComponentCamera();
+  cmpCamera.mtxPivot.rotateX(90);
+  cmpCamera.mtxPivot.rotateZ(180);
+  cmpCamera.mtxPivot.translateZ(-35);
+  graph.addComponent(cmpCamera);
+
+  let canvas = document.querySelector("canvas");
+  viewport = new ƒ.Viewport();
+  viewport.initialize("Viewport", graph, cmpCamera, canvas);
+
+
+  
 
   //let rotation: ƒ.Matrix4x4;
-  let rotatingspeed: number = 360;
+  
   //let transform: ƒ.Matrix4x4;
 
-  let agent: Agent;
+  
   //let laserbase: ƒ.Node;
-  let forward: ƒ.Control = new ƒ.Control("Forward", 10, ƒ.CONTROL_TYPE.PROPORTIONAL)
+  
   forward.setDelay(300);
-  let agenttransform: ƒ.Matrix4x4;
-  let copy: ƒ.GraphInstance;
+  
+  
   //let soundcoll: boolean;
   //let i: number = 0
   //let j: number = 0
 
-  let LaserStruckture: ƒ.Node
+  
   //let graph: ƒ.Node;
-  async function start(_event: CustomEvent): Promise<void> {
-    viewport = _event.detail;
+  
+   
 
 
 
 
-    let graph: ƒ.Node = viewport.getBranch();
-
+    graph = viewport.getBranch();
+    ƒ.AudioManager.default.listenTo(graph)
+    ƒ.AudioManager.default.listenWith(graph.getComponent(ƒ.ComponentAudioListener))
     //laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
     //agent = graph.getChildrenByName("Agent")[0];
     agent = new Agent();

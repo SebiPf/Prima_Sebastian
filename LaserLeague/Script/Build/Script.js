@@ -81,24 +81,36 @@ var LaserLeague;
     ƒ.Debug.info("Main Program Template running!");
     //let speedagent: number = 1;
     let viewport;
-    document.addEventListener("interactiveViewportStarted", start);
-    //let rotation: ƒ.Matrix4x4;
     let rotatingspeed = 360;
-    //let transform: ƒ.Matrix4x4;
-    let agent;
-    //let laserbase: ƒ.Node;
-    let forward = new ƒ.Control("Forward", 10, 0 /* PROPORTIONAL */);
-    forward.setDelay(300);
-    let agenttransform;
     let copy;
-    //let soundcoll: boolean;
-    //let i: number = 0
-    //let j: number = 0
+    let agent;
+    let agenttransform;
     let LaserStruckture;
-    //let graph: ƒ.Node;
-    async function start(_event) {
-        viewport = _event.detail;
-        let graph = viewport.getBranch();
+    let forward = new ƒ.Control("Forward", 10, 0 /* PROPORTIONAL */);
+    //document.addEventListener("interactiveViewportStarted", <any>start);
+    window.addEventListener("load", start);
+    async function start(_enent) {
+        await ƒ.Project.loadResourcesFromHTML();
+        let graph = ƒ.Project.resources["Graph|2021-10-13T12:20:20.596Z|97454"];
+        let cmpCamera = new ƒ.ComponentCamera();
+        cmpCamera.mtxPivot.rotateX(90);
+        cmpCamera.mtxPivot.rotateZ(180);
+        cmpCamera.mtxPivot.translateZ(-35);
+        graph.addComponent(cmpCamera);
+        let canvas = document.querySelector("canvas");
+        viewport = new ƒ.Viewport();
+        viewport.initialize("Viewport", graph, cmpCamera, canvas);
+        //let rotation: ƒ.Matrix4x4;
+        //let transform: ƒ.Matrix4x4;
+        //let laserbase: ƒ.Node;
+        forward.setDelay(300);
+        //let soundcoll: boolean;
+        //let i: number = 0
+        //let j: number = 0
+        //let graph: ƒ.Node;
+        graph = viewport.getBranch();
+        ƒ.AudioManager.default.listenTo(graph);
+        ƒ.AudioManager.default.listenWith(graph.getComponent(ƒ.ComponentAudioListener));
         //laserbase = graph.getChildrenByName("LaserStruckture")[0].getChildrenByName("LaserBase")[0];
         //agent = graph.getChildrenByName("Agent")[0];
         agent = new LaserLeague.Agent();

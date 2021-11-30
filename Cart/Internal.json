@@ -44,7 +44,8 @@
     "ƒ.MeshRelief": {
       "idResource": "MeshRelief|2021-11-25T11:21:13.166Z|86786",
       "name": "MeshRelief",
-      "type": "MeshRelief"
+      "type": "MeshRelief",
+      "idTexture": "TextureImage|2021-11-25T11:18:42.885Z|49671"
     }
   },
   "Material|2021-11-25T11:21:56.408Z|37776": {

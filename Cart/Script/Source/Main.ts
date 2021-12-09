@@ -9,7 +9,7 @@ namespace Script {
   let camera: ƒ.Node = new ƒ.Node("Cam1")
   //let mult: number
   //let body: ƒ.ComponentRigidbody;
-  let ctrForward: ƒ.Control = new ƒ.Control("Forward", 8, ƒ.CONTROL_TYPE.PROPORTIONAL);
+  let ctrForward: ƒ.Control = new ƒ.Control("Forward", 10, ƒ.CONTROL_TYPE.PROPORTIONAL);
   //ctrForward.setDelay(200);
   let ctrTurn: ƒ.Control = new ƒ.Control("Turn", 5, ƒ.CONTROL_TYPE.PROPORTIONAL);
   //ctrForward.setDelay(50);
@@ -32,14 +32,14 @@ namespace Script {
     camera.addComponent(new ƒ.ComponentCamera)
     camera.addComponent(new ƒ.ComponentTransform)
     camera.getComponent(ƒ.ComponentCamera).mtxPivot.translation = new ƒ.Vector3(0, 12, -22)
-    camera.getComponent(ƒ.ComponentCamera).mtxPivot.rotation = new ƒ.Vector3(25, 0, 0)
+    camera.getComponent(ƒ.ComponentCamera).mtxPivot.rotation = new ƒ.Vector3(15, 0, 0)
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
     //graph.getChildrenByName("Agent")[0].addChild(cameraNode);
     graph.addChild(camera);
     let canvas: HTMLCanvasElement = document.querySelector("canvas");
     viewport = new ƒ.Viewport();
     viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
-    cartrb.mass = 2;
+    cartrb.mass = 10;
     cartrb.effectGravity = 0;
     cartrb.dampTranslation = 10;
     cartrb.dampRotation = 10
@@ -112,8 +112,8 @@ namespace Script {
       
       //let forcevec = new ƒ.Vector3(0, -cartrb.mass * 4 * dist, 0);
       //let vek: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass * 4 * dist,0 )
-      let forcevec: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass  * dist*16/(-1),0);
-      let force: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass* (-10)/1,0);
+      let forcevec: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass  * dist*16/(-1)*3,0);
+      let force: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass* (-10)/1*3,0);
       cartrb.applyForceAtPoint(force, posForce);
       //cartrb.applyForceAtPoint(new ƒ.Vector3(0,-50,0),cart.getChildrenByName("PointForce1")[0].mtxWorld.translation)
       //console.log(cart.mtxWorld.translation.y)

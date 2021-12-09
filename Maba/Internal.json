@@ -1,0 +1,30 @@
+{
+  "MeshCube|2021-12-01T20:47:24.224Z|96833": {
+    "ƒ.MeshCube": {
+      "idResource": "MeshCube|2021-12-01T20:47:24.224Z|96833",
+      "name": "MeshCube",
+      "type": "MeshCube"
+    }
+  },
+  "Material|2021-12-01T20:47:28.272Z|24361": {
+    "ƒ.Material": {
+      "name": "NewMaterial",
+      "idResource": "Material|2021-12-01T20:47:28.272Z|24361",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[1, 1, 1, 1]"
+        }
+      }
+    }
+  },
+  "Graph|2021-12-01T18:28:10.150Z|79155": {
+    "ƒ.Graph": {
+      "name": "Main",
+      "components": {},
+      "children": [],
+      "idResource": "Graph|2021-12-01T18:28:10.150Z|79155",
+      "type": "Graph"
+    }
+  }
+}

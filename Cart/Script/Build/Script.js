@@ -44,7 +44,7 @@ var Script;
     let camera = new ƒ.Node("Cam1");
     //let mult: number
     //let body: ƒ.ComponentRigidbody;
-    let ctrForward = new ƒ.Control("Forward", 5, 0 /* PROPORTIONAL */);
+    let ctrForward = new ƒ.Control("Forward", 8, 0 /* PROPORTIONAL */);
     //ctrForward.setDelay(200);
     let ctrTurn = new ƒ.Control("Turn", 5, 0 /* PROPORTIONAL */);
     //ctrForward.setDelay(50);
@@ -71,7 +71,7 @@ var Script;
         let canvas = document.querySelector("canvas");
         viewport = new ƒ.Viewport();
         viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
-        cartrb.mass = 200;
+        cartrb.mass = 2;
         cartrb.effectGravity = 0;
         cartrb.dampTranslation = 10;
         cartrb.dampRotation = 10;
@@ -130,13 +130,13 @@ var Script;
             dist = dist - 1;
             //let forcevec = new ƒ.Vector3(0, -cartrb.mass * 4 * dist, 0);
             //let vek: ƒ.Vector3 = new ƒ.Vector3(0,cartrb.mass * 4 * dist,0 )
-            let forcevec = new ƒ.Vector3(0, cartrb.mass * dist * 16 / (-10), 0);
-            let force = new ƒ.Vector3(0, cartrb.mass * (-10) / 10, 0);
+            let forcevec = new ƒ.Vector3(0, cartrb.mass * dist * 16 / (-1), 0);
+            let force = new ƒ.Vector3(0, cartrb.mass * (-10) / 1, 0);
             cartrb.applyForceAtPoint(force, posForce);
             //cartrb.applyForceAtPoint(new ƒ.Vector3(0,-50,0),cart.getChildrenByName("PointForce1")[0].mtxWorld.translation)
             //console.log(cart.mtxWorld.translation.y)
             cartrb.applyForceAtPoint(forcevec, posForce);
-            console.log("pos: " + posForce + "force: " + force + "forcevec: " + forcevec + "dis: " + dist);
+            console.log("pos: " + posForce + "forcedown: " + force + "forceup: " + forcevec + "dist: " + dist);
             //console.log(force, forcevec)
         }
         console.log("next");

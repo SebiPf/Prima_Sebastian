@@ -80,6 +80,26 @@
       }
     }
   },
+  "MeshRelief|2021-12-13T22:47:06.577Z|40912": {
+    "ƒ.MeshRelief": {
+      "idResource": "MeshRelief|2021-12-13T22:47:06.577Z|40912",
+      "name": "ground",
+      "type": "MeshRelief",
+      "idTexture": "TextureImage|2021-12-13T22:47:52.871Z|44992"
+    }
+  },
+  "Material|2021-12-13T22:49:53.966Z|70241": {
+    "ƒ.Material": {
+      "name": "NewMaterial",
+      "idResource": "Material|2021-12-13T22:49:53.966Z|70241",
+      "shader": "ShaderUniColor",
+      "coat": {
+        "ƒ.CoatColored": {
+          "color": "[1, 0, 0, 1]"
+        }
+      }
+    }
+  },
   "Graph|2021-11-25T11:20:14.002Z|22521": {
     "ƒ.Graph": {
       "name": "Main",
@@ -426,6 +446,47 @@
             },
             "children": []
           }
+        },
+        {
+          "ƒ.Node": {
+            "name": "MapGround",
+            "components": {
+              "ComponentMesh": [
+                {
+                  "ƒ.ComponentMesh": {
+                    "idMesh": "MeshRelief|2021-12-13T22:47:06.577Z|40912",
+                    "pivot": {
+                      "translation": "[0, -50, 0]",
+                      "rotation": "[0, 0, 0]",
+                      "scaling": "[1000, 10, 1000]"
+                    },
+                    "Component": {
+                      "active": true
+                    }
+                  }
+                }
+              ],
+              "ComponentMaterial": [
+                {
+                  "ƒ.ComponentMaterial": {
+                    "sortForAlpha": false,
+                    "clrPrimary": "[1, 1, 1, 1]",
+                    "clrSecondary": "[1, 1, 1, 1]",
+                    "pivot": {
+                      "translation": "[0, 0]",
+                      "rotation": 0,
+                      "scaling": "[1, 1]"
+                    },
+                    "Component": {
+                      "active": true
+                    },
+                    "idMaterial": "Material|2021-12-13T22:49:53.966Z|70241"
+                  }
+                }
+              ]
+            },
+            "children": []
+          }
         }
       ],
       "idResource": "Graph|2021-11-25T11:20:14.002Z|22521",
@@ -445,6 +506,17 @@
       },
       "fitTexture": true,
       "sectors": 12
+    }
+  },
+  "TextureImage|2021-12-13T22:47:52.871Z|44992": {
+    "ƒ.TextureImage": {
+      "url": "Image\\mapground.png",
+      "type": "TextureImage",
+      "Texture": {
+        "idResource": "TextureImage|2021-12-13T22:47:52.871Z|44992",
+        "name": "Image\\mapground.png",
+        "mipmap": "CRISP"
+      }
     }
   }
 }

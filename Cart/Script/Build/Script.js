@@ -41,12 +41,14 @@ var Script;
     let cart;
     let mtxTerrain;
     let meshTerrain;
+    let mtxTerrainground;
+    let meshTerrainground;
     let camera = new ƒ.Node("Cam1");
     //let mult: number
     //let body: ƒ.ComponentRigidbody;
     let ctrForward = new ƒ.Control("Forward", 10, 0 /* PROPORTIONAL */);
     //ctrForward.setDelay(200);
-    let ctrTurn = new ƒ.Control("Turn", 5, 0 /* PROPORTIONAL */);
+    let ctrTurn = new ƒ.Control("Turn", 10, 0 /* PROPORTIONAL */);
     //ctrForward.setDelay(50);
     let cartrb;
     //let terrainpos: ƒ.Vector3;
@@ -59,6 +61,9 @@ var Script;
         let cmpMeshTerrain = graph.getChildrenByName("Map")[0].getComponent(ƒ.ComponentMesh);
         meshTerrain = cmpMeshTerrain.mesh;
         mtxTerrain = cmpMeshTerrain.mtxWorld;
+        let cmpMeshTerrainground = graph.getChildrenByName("MapGround")[0].getComponent(ƒ.ComponentMesh);
+        meshTerrainground = cmpMeshTerrainground.mesh;
+        mtxTerrainground = cmpMeshTerrainground.mtxWorld;
         cart = graph.getChildrenByName("Agent")[0];
         cartrb = cart.getComponent(ƒ.ComponentRigidbody);
         camera.addComponent(new ƒ.ComponentCamera);
@@ -79,6 +84,17 @@ var Script;
         ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     function update(_event) {
+        let cartpos = cart.getComponent(ƒ.ComponentMesh).mtxWorld.translation;
+        let terrainInfoground = meshTerrainground.getTerrainInfo(cartpos, mtxTerrainground);
+        let posground = terrainInfoground.position.y;
+        if (posground < -45) {
+            cartrb.dampTranslation = 10;
+            cartrb.dampRotation = 10;
+        }
+        else {
+            cartrb.dampTranslation = 30;
+            cartrb.dampRotation = 10;
+        }
         ƒ.Physics.world.simulate(); // if physics is included and used
         //camera.mtxLocal.translation = cart.mtxWorld.translation;
         //camera.mtxLocal.rotation = new ƒ.Vector3(0,)

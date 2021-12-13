@@ -6,12 +6,14 @@ namespace Script {
   let cart: ƒ.Node;
   let mtxTerrain: ƒ.Matrix4x4;
   let meshTerrain: ƒ.MeshTerrain;
+  let mtxTerrainground: ƒ.Matrix4x4;
+  let meshTerrainground: ƒ.MeshTerrain;
   let camera: ƒ.Node = new ƒ.Node("Cam1")
   //let mult: number
   //let body: ƒ.ComponentRigidbody;
   let ctrForward: ƒ.Control = new ƒ.Control("Forward", 10, ƒ.CONTROL_TYPE.PROPORTIONAL);
   //ctrForward.setDelay(200);
-  let ctrTurn: ƒ.Control = new ƒ.Control("Turn", 5, ƒ.CONTROL_TYPE.PROPORTIONAL);
+  let ctrTurn: ƒ.Control = new ƒ.Control("Turn", 10, ƒ.CONTROL_TYPE.PROPORTIONAL);
   //ctrForward.setDelay(50);
   let cartrb: ƒ.ComponentRigidbody;
   //let terrainpos: ƒ.Vector3;
@@ -27,6 +29,9 @@ namespace Script {
     let cmpMeshTerrain: ƒ.ComponentMesh = graph.getChildrenByName("Map")[0].getComponent(ƒ.ComponentMesh);
     meshTerrain = <ƒ.MeshTerrain>cmpMeshTerrain.mesh;
     mtxTerrain = cmpMeshTerrain.mtxWorld;
+    let cmpMeshTerrainground: ƒ.ComponentMesh = graph.getChildrenByName("MapGround")[0].getComponent(ƒ.ComponentMesh);
+    meshTerrainground = <ƒ.MeshTerrain>cmpMeshTerrainground.mesh;
+    mtxTerrainground = cmpMeshTerrainground.mtxWorld;
     cart = graph.getChildrenByName("Agent")[0];
     cartrb = cart.getComponent(ƒ.ComponentRigidbody);
     camera.addComponent(new ƒ.ComponentCamera)
@@ -50,6 +55,17 @@ namespace Script {
   }
 
   function update(_event: Event): void {
+    let cartpos: ƒ.Vector3 = cart.getComponent(ƒ.ComponentMesh).mtxWorld.translation;
+    let terrainInfoground: ƒ.TerrainInfo = meshTerrainground.getTerrainInfo(cartpos, mtxTerrainground);
+    let posground: number = terrainInfoground.position.y;
+    if(posground < -45){
+      cartrb.dampTranslation = 10;
+      cartrb.dampRotation = 10
+    }
+    else{
+      cartrb.dampTranslation = 30;
+      cartrb.dampRotation = 10
+    }
     ƒ.Physics.world.simulate();  // if physics is included and used
     //camera.mtxLocal.translation = cart.mtxWorld.translation;
     //camera.mtxLocal.rotation = new ƒ.Vector3(0,)
@@ -92,6 +108,8 @@ namespace Script {
     //let forceNodes: ƒ.Node[] = cart.getChildren();
     //let force2: number = forcevec.y;
     for (let PointForce of forceNodes) {
+
+
       let posForce: ƒ.Vector3 = PointForce.getComponent(ƒ.ComponentMesh).mtxWorld.translation;
       
       //let height: number = posForce.y - terrainInfo.position.y;

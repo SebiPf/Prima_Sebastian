@@ -13,7 +13,7 @@ namespace LaserLeague {
   let forward: ƒ.Control = new ƒ.Control("Forward", 10, ƒ.CONTROL_TYPE.PROPORTIONAL)
   //document.addEventListener("interactiveViewportStarted", <any>start);
 window.addEventListener("load",start);
-async function start(_enent: Event): Promise<void> {
+async function start(_event: Event): Promise<void> {
   await ƒ.Project.loadResourcesFromHTML();
   let graph: any = ƒ.Project.resources["Graph|2021-10-13T12:20:20.596Z|97454"];
   let cmpCamera = new ƒ.ComponentCamera();

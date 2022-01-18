@@ -63,7 +63,7 @@ namespace Script {
       cartrb.dampRotation = 10
     }
     else{
-      cartrb.dampTranslation = 30;
+      cartrb.dampTranslation = 50;
       cartrb.dampRotation = 10
     }
     ƒ.Physics.world.simulate();  // if physics is included and used

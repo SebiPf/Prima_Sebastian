@@ -38,8 +38,12 @@ namespace Script {
     }
 
     private static async actIdle(_machine: StateMachine): Promise<void> {
-      _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 0, 255, 255);
-
+      if(_machine.node.getParent().name =="Lines"){
+        _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 0, 0, 255);
+      }
+      else{
+      _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 255, 255, 255);
+      }
     }
     private static async actHoverd1(_machine: StateMachine): Promise<void> {
       _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 255, 0, 255);

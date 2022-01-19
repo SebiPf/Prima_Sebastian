@@ -49,32 +49,33 @@ var Script;
     Script.rayDistance = new ƒ.Vector3(0, 0, 0);
     let Base;
     let lines;
+    let cubes;
     //import * as Mongo from "mongodb";
     window.addEventListener("load", start);
     async function start(_event) {
-        const { MongoClient } = require('mongodb');
-        const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
-        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        //const { MongoClient } = require('mongodb');
+        //const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
+        //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
         /*client.connect(err => {
           const collection = client.db("test").collection("devices");
           // perform actions on the collection object
           client.close();
         });
         */
-        async function run() {
-            try {
-                // Connect the client to the server
-                await client.connect();
-                // Establish and verify connection
-                await client.db("admin").command({ ping: 1 });
-                console.log("Connected successfully to server");
-            }
-            finally {
-                // Ensures that the client will close when you finish/error
-                await client.close();
-            }
+        /*async function run() {
+          try {
+            // Connect the client to the server
+            await client.connect();
+            // Establish and verify connection
+            await client.db("admin").command({ ping: 1 });
+            console.log("Connected successfully to server");
+          } finally {
+            // Ensures that the client will close when you finish/error
+            await client.close();
+          }
         }
         run().catch(console.dir);
+    */
         await ƒ.Project.loadResourcesFromHTML();
         graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
         document.addEventListener("interactiveViewportStarted", start);
@@ -87,15 +88,21 @@ var Script;
         viewport = new ƒ.Viewport();
         Base = graph.getChildrenByName("Base")[0];
         lines = Base.getChildrenByName("Lines")[0];
-        for (let i = 0; i < 4; i++) {
+        cubes = Base.getChildrenByName("Cubes")[0];
+        for (let i = 0; i < 144; i++) {
             Script.line = lines.getChildrenByName("Line")[i];
             Script.line.addComponent(new Script.StateMachine());
         }
+        for (let i = 0; i < 64; i++) {
+            Script.cube = cubes.getChildrenByName("Cube")[i];
+            Script.cube.addComponent(new Script.StateMachine());
+        }
         console.log(lines);
+        console.log(cubes);
         viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
         viewport.activatePointerEvent("\u0192pointermove" /* MOVE */, true);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
-        ƒ.Loop.start(); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
+        ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 30); // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
     }
     Script.start = start;
     function update(_event) {
@@ -115,6 +122,7 @@ var Script;
     //import * as Mongo from "mongodb";
     let graph;
     let lines;
+    let cubes;
     let turn = "Player1";
     let Base;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
@@ -145,15 +153,18 @@ var Script;
             };
             this.update = (_event) => {
                 graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
-                let i = 1;
-                for (i = 0; i < 4; i++) {
+                let i = 0;
+                let check = false;
+                //console.log("start for")
+                for (i = 0; i < 144; i++) {
                     Base = graph.getChildrenByName("Base")[0];
                     lines = Base.getChildrenByName("Lines")[0];
                     Script.line = lines.getChildrenByName("Line")[i];
                     let posLocal = ƒ.Vector3.TRANSFORMATION(Script.rayDistance, Script.line.mtxWorldInverse, true);
                     if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && turn == "Player1") {
                         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ENTER])) {
-                            turn = "Player2";
+                            //turn="Player2"
+                            check = true;
                             Script.line.getComponent(StateMachine).transit(JOB.PLAYER1);
                         }
                         else {
@@ -162,16 +173,99 @@ var Script;
                     }
                     else if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && turn == "Player2") {
                         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ENTER])) {
-                            turn = "Player1";
+                            //turn="Player1"
+                            check = true;
                             Script.line.getComponent(StateMachine).transit(JOB.PLAYER2);
                         }
                         else {
                             Script.line.getComponent(StateMachine).transit(JOB.HOVERED2);
                         }
                     }
-                    else if (Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2) {
+                    else if (Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && Script.line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && Script.line.getComponent(StateMachine).stateCurrent != JOB.IDLE) {
                         Script.line.getComponent(StateMachine).transit(JOB.IDLE);
+                        //break
                     }
+                    //console.log(line.getComponent(StateMachine).stateCurrent)
+                }
+                let j = 0;
+                if (check == true) {
+                    for (j = 0; j < 64; j++) {
+                        let x = 0;
+                        let y = 0;
+                        if (j < 9) {
+                            x = 72;
+                            y = 73;
+                        }
+                        else if (j < 17 && j > 8) {
+                            x = 73;
+                            y = 74;
+                        }
+                        else if (j < 25 && j > 16) {
+                            x = 74;
+                            y = 75;
+                        }
+                        else if (j < 33 && j > 15) {
+                            x = 75;
+                            y = 76;
+                        }
+                        else if (j < 41 && j > 31) {
+                            x = 76;
+                            y = 77;
+                        }
+                        else if (j < 49 && j > 39) {
+                            x = 77;
+                            y = 78;
+                        }
+                        else if (j < 57 && j > 47) {
+                            x = 78;
+                            y = 79;
+                        }
+                        else if (j < 65 && j > 47) {
+                            x = 79;
+                            y = 80;
+                        }
+                        Base = graph.getChildrenByName("Base")[0];
+                        cubes = Base.getChildrenByName("Cubes")[0];
+                        lines = Base.getChildrenByName("Lines")[0];
+                        Script.cube = cubes.getChildrenByName("Cube")[j];
+                        Script.line = lines.getChildrenByName("Line")[j];
+                        //console.log(cube);
+                        if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player1") {
+                            //console.log("test player 1 field")
+                            if (Script.cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && Script.cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER1) {
+                                Script.cube.getComponent(StateMachine).transit(JOB.PLAYER2);
+                                check = false;
+                                turn = "Player2";
+                                break;
+                            }
+                            //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
+                            //turn = "Player2"
+                        }
+                        else if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player2") {
+                            //console.log("test player 2 field")
+                            if (Script.cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && Script.cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER1) {
+                                Script.cube.getComponent(StateMachine).transit(JOB.PLAYER1);
+                                check = false;
+                                turn = "Player1";
+                                break;
+                            }
+                            //cube.getComponent(StateMachine).transit(JOB.PLAYER1) 
+                            //turn = "Player1"
+                        }
+                        else {
+                            if (turn == "Player1" && check == true) {
+                                turn = "Player2";
+                                //console.log("test",check)
+                                check = false;
+                            }
+                            if (turn == "Player2" && check == true) {
+                                turn = "Player1";
+                                //console.log("test1",check)
+                                check = false;
+                            }
+                        }
+                    }
+                    check = false;
                 }
                 this.act();
             };
@@ -198,6 +292,7 @@ var Script;
         }
         static async actHoverd1(_machine) {
             _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 255, 0, 255);
+            //console.log()
         }
         static async actHoverd2(_machine) {
             _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 0, 0, 255);

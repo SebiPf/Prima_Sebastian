@@ -11,6 +11,7 @@ declare namespace Script {
     import ƒ = FudgeCore;
     let rayDistance: ƒ.Vector3;
     let line: ƒ.Node;
+    let cube: ƒ.Node;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
 }

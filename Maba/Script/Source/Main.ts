@@ -8,23 +8,25 @@ namespace Script {
   let ray: ƒ.Ray;
   export let rayDistance: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0)
   export let line: ƒ.Node
+  export let cube: ƒ.Node
   let Base: ƒ.Node
   let lines: ƒ.Node
+  let cubes: ƒ.Node
   //import * as Mongo from "mongodb";
   window.addEventListener("load", start);
 
   export async function start(_event: Event): Promise<void> {
     
-    const { MongoClient } = require('mongodb');
-    const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    //const { MongoClient } = require('mongodb');
+    //const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
+    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     /*client.connect(err => {
       const collection = client.db("test").collection("devices");
       // perform actions on the collection object
       client.close();
     });
     */
-    async function run() {
+    /*async function run() {
       try {
         // Connect the client to the server
         await client.connect();
@@ -37,7 +39,7 @@ namespace Script {
       }
     }
     run().catch(console.dir);
-
+*/
     await ƒ.Project.loadResourcesFromHTML();
     graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
@@ -50,15 +52,21 @@ namespace Script {
     viewport = new ƒ.Viewport();
     Base = graph.getChildrenByName("Base")[0]
     lines = Base.getChildrenByName("Lines")[0]
-    for (let i = 0; i < 4; i++) {
+    cubes = Base.getChildrenByName("Cubes")[0]
+    for (let i = 0; i < 144; i++) {
       line = lines.getChildrenByName("Line")[i];
       line.addComponent(new StateMachine());
     }
+    for (let i = 0; i < 64; i++) {
+      cube = cubes.getChildrenByName("Cube")[i];
+      cube.addComponent(new StateMachine());
+    }
     console.log(lines)
+    console.log(cubes)
     viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
     viewport.activatePointerEvent(ƒ.EVENT_POINTER.MOVE, true);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
-    ƒ.Loop.start();  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
+    ƒ.Loop.start(ƒ.LOOP_MODE.TIME_REAL, 30);  // start the game loop to continously draw the viewport, update the audiosystem and drive the physics i/a
   }
 
   function update(_event: Event): void {

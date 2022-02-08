@@ -14,6 +14,7 @@ declare namespace Script {
     let cube: ƒ.Node;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
+    function hndMousclick(_event: any): void;
 }
 declare namespace Script {
     import ƒAid = FudgeAid;
@@ -25,6 +26,7 @@ declare namespace Script {
         PLAYER1 = 3,
         PLAYER2 = 4
     }
+    function change(_event: Event): Promise<void>;
     class StateMachine extends ƒAid.ComponentStateMachine<JOB> {
         static readonly iSubclass: number;
         private static instructions;

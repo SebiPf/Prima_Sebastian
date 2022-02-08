@@ -7,10 +7,39 @@ namespace Script {
   let cubes: ƒ.Node
   let turn: String = "Player1"
   let Base: ƒ.Node
+  let linestate: StateMachine
+  let linestatea: StateMachine
+  let linestateb: StateMachine
+  let linestatec: StateMachine
+  let linestated: StateMachine
+  let check = false;
   export let col: boolean
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
   export enum JOB {
     IDLE, HOVERED1, HOVERED2, PLAYER1, PLAYER2
+  }
+  export async function change(_event: Event): Promise<void> {
+    for (let i = 0; i < 144; i++) {
+      Base = graph.getChildrenByName("Base")[0]
+      lines = Base.getChildrenByName("Lines")[0]
+      line = lines.getChildrenByName("Line")[i]
+      if(line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1){
+        line.getComponent(StateMachine).transit(JOB.PLAYER1)
+        check = true
+        //turn= "PLAYER2"
+      }
+      else if(line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2){
+        line.getComponent(StateMachine).transit(JOB.PLAYER2)
+        check = true
+        //turn= "PLAYER1"
+      }
+      if(turn == "PLAYER1"){
+        turn= "PLAYER2"      }
+        else if(turn == "PLAYER2"){
+          turn= "PLAYER1"
+        }
+      
+    }
   }
   export class StateMachine extends ƒAid.ComponentStateMachine<JOB> {
     public static readonly iSubclass: number = ƒ.Component.registerSubclass(StateMachine);
@@ -26,6 +55,7 @@ namespace Script {
       this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
       this.addEventListener(ƒ.EVENT.COMPONENT_REMOVE, this.hndEvent);
       this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.hndEvent);
+      
     }
     public static get(): ƒAid.StateMachineInstructions<JOB> {
       let setup: ƒAid.StateMachineInstructions<JOB> = new ƒAid.StateMachineInstructions();
@@ -72,44 +102,38 @@ namespace Script {
         case ƒ.EVENT.NODE_DESERIALIZED:
       }
     }
-
+    
 
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-      let check = false;
+      
       //console.log("start for")
       for (i = 0; i < 144; i++) {
 
         Base = graph.getChildrenByName("Base")[0]
         lines = Base.getChildrenByName("Lines")[0]
         line = lines.getChildrenByName("Line")[i]
+        linestate = line.getComponent(StateMachine);
         let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
-        if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && turn == "Player1") {
-          if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ENTER])) {
-            //turn="Player2"
-            check = true
-            line.getComponent(StateMachine).transit(JOB.PLAYER1)
-            
-          }
-          else {
+        if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
+          
+          if(turn == "Player1"){
+          
+          
             line.getComponent(StateMachine).transit(JOB.HOVERED1)
-            
-          }
+          
         }
-        else if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && turn == "Player2") {
-          if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ENTER])) {
-            //turn="Player1"
-            check = true
-            line.getComponent(StateMachine).transit(JOB.PLAYER2)
-            
-          }
-          else {
+        else if(turn == "Player2"){
+          
+          
+        
             line.getComponent(StateMachine).transit(JOB.HOVERED2)
             
-          }
+          
         }
-        else if (line.getComponent(StateMachine).stateCurrent != JOB.PLAYER1 && line.getComponent(StateMachine).stateCurrent != JOB.PLAYER2&&line.getComponent(StateMachine).stateCurrent != JOB.IDLE) {
+        }
+        else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2&&linestate.stateCurrent != JOB.IDLE) {
           line.getComponent(StateMachine).transit(JOB.IDLE)
           //break
         }
@@ -120,35 +144,35 @@ namespace Script {
         for (j = 0; j < 64; j++) {
           let x = 0
           let y = 0
-          if (j < 9) {
+          if (j < 8) {
             x = 72
             y = 73
           }
-          else if (j < 17 && j > 8) {
+          else if (j < 16 && j > 7) {
             x = 73
             y = 74
           }
-          else if (j < 25 && j > 16) {
+          else if (j < 24 && j > 15) {
             x = 74
             y = 75
           }
-          else if (j < 33 && j > 15) {
+          else if (j < 32 && j > 23) {
             x = 75
             y = 76
           }
-          else if (j < 41 && j > 31) {
+          else if (j < 40 && j > 31) {
             x = 76
             y = 77
           }
-          else if (j < 49 && j > 39) {
+          else if (j < 48 && j > 39) {
             x = 77
             y = 78
           }
-          else if (j < 57 && j > 47) {
+          else if (j < 56 && j > 47) {
             x = 78
             y = 79
           }
-          else if (j < 65 && j > 47) {
+          else if (j < 64 && j > 55) {
             x = 79
             y = 80
           }
@@ -159,13 +183,22 @@ namespace Script {
           cube = cubes.getChildrenByName("Cube")[j]
           line = lines.getChildrenByName("Line")[j]
           //console.log(cube);
-          
-          if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player1") {
+          linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+          linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+          linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+          linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+          if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2) ) {
             //console.log("test player 1 field")
-            if (cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER1) {
+            if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER2)
               check = false
               turn = "Player2"
+              break
+            }
+            else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+              cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+              check = false
+              turn = "Player1"
               break
             }
             
@@ -173,7 +206,7 @@ namespace Script {
             //turn = "Player2"
             
           }
-          else if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player2") {
+          /*else if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player2") {
             //console.log("test player 2 field")
             if (cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER1) {
               cube.getComponent(StateMachine).transit(JOB.PLAYER1)
@@ -186,7 +219,7 @@ namespace Script {
             //cube.getComponent(StateMachine).transit(JOB.PLAYER1) 
             //turn = "Player1"
             
-          }
+          }*/
           
           else {
             if(turn == "Player1"&&check == true){

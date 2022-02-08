@@ -9,24 +9,27 @@ namespace Script {
   export let rayDistance: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0)
   export let line: ƒ.Node
   export let cube: ƒ.Node
+
   let Base: ƒ.Node
   let lines: ƒ.Node
   let cubes: ƒ.Node
   //import * as Mongo from "mongodb";
   window.addEventListener("load", start);
 
+
+  
   export async function start(_event: Event): Promise<void> {
     
-    //const { MongoClient } = require('mongodb');
-    //const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
-    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    /*const { MongoClient } = require('mongodb');
+    const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     /*client.connect(err => {
       const collection = client.db("test").collection("devices");
       // perform actions on the collection object
       client.close();
     });
-    */
-    /*async function run() {
+    
+    async function run() {
       try {
         // Connect the client to the server
         await client.connect();
@@ -40,6 +43,8 @@ namespace Script {
     }
     run().catch(console.dir);
 */
+    window.addEventListener("click", change);
+
     await ƒ.Project.loadResourcesFromHTML();
     graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
@@ -71,9 +76,14 @@ namespace Script {
 
   function update(_event: Event): void {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
+    
     viewport.draw();
   }
   export function hndPointerMove(_event: ƒ.EventPointer): void {
+    ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
+    rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
+  }
+  export function hndMousclick(_event: any): void {
     ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
   }

@@ -1,3 +1,5 @@
+//import { count } from "console";
+
 //import * as Mongo from "mongodb";
 namespace Script {
   import ƒ = FudgeCore;
@@ -9,7 +11,8 @@ namespace Script {
   export let rayDistance: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0)
   export let line: ƒ.Node
   export let cube: ƒ.Node
-
+  export let Player1count = 0
+  export let Player2count = 0
   let Base: ƒ.Node
   let lines: ƒ.Node
   let cubes: ƒ.Node
@@ -50,7 +53,7 @@ namespace Script {
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
     camera.addComponent(new ƒ.ComponentCamera)
     camera.addComponent(new ƒ.ComponentTransform)
-    camera.getComponent(ƒ.ComponentCamera).mtxPivot.translation = new ƒ.Vector3(0, 80, 0)
+    camera.getComponent(ƒ.ComponentCamera).mtxPivot.translation = new ƒ.Vector3(0, 100, 0)
     camera.getComponent(ƒ.ComponentCamera).mtxPivot.rotation = new ƒ.Vector3(90, 0, 0)
     graph.addChild(camera);
     let canvas: HTMLCanvasElement = document.querySelector("canvas");
@@ -76,7 +79,9 @@ namespace Script {
 
   function update(_event: Event): void {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
-    
+    GameState.get().player1 = Player1count;
+    GameState.get().player2 = Player2count;
+    //console.log(Player1count)
     viewport.draw();
   }
   export function hndPointerMove(_event: ƒ.EventPointer): void {

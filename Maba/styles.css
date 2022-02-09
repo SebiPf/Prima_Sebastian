@@ -14,3 +14,23 @@ canvas.fullscreen {
   width: 100vw; 
   height: 100vh; 
 }
+div#Hud {
+  position: absolute;
+  top: 0px;
+  left: 42%;
+  width: 20%;
+  height: 90px;
+  color: white;
+  background-color: transparent;
+  opacity: 100;
+  border-radius: 5px;
+  
+}
+
+.test{
+  width:15%;
+  text-align:center;
+  color: white;
+  background-color: transparent;
+  border: none;
+}

@@ -36,8 +36,31 @@ var Script;
     CustomComponentScript.iSubclass = ƒ.Component.registerSubclass(CustomComponentScript);
     Script.CustomComponentScript = CustomComponentScript;
 })(Script || (Script = {}));
+var Script;
+(function (Script) {
+    var ƒ = FudgeCore;
+    var ƒui = FudgeUserInterface;
+    class GameState extends ƒ.Mutable {
+        constructor() {
+            super();
+            this.player1 = 1;
+            this.player2 = 1;
+            let domHud = document.querySelector("#Hud");
+            GameState.instance = this;
+            GameState.controller = new ƒui.Controller(this, domHud);
+            console.log("Hud-Controller", GameState.controller);
+        }
+        static get() {
+            return GameState.instance || new GameState();
+        }
+        reduceMutator(_mutator) { }
+    }
+    Script.GameState = GameState;
+})(Script || (Script = {}));
+//import { count } from "console";
 //import * as Mongo from "mongodb";
 var Script;
+//import { count } from "console";
 //import * as Mongo from "mongodb";
 (function (Script) {
     var ƒ = FudgeCore;
@@ -47,6 +70,8 @@ var Script;
     let viewport;
     let ray;
     Script.rayDistance = new ƒ.Vector3(0, 0, 0);
+    Script.Player1count = 0;
+    Script.Player2count = 0;
     let Base;
     let lines;
     let cubes;
@@ -82,7 +107,7 @@ var Script;
         document.addEventListener("interactiveViewportStarted", start);
         camera.addComponent(new ƒ.ComponentCamera);
         camera.addComponent(new ƒ.ComponentTransform);
-        camera.getComponent(ƒ.ComponentCamera).mtxPivot.translation = new ƒ.Vector3(0, 80, 0);
+        camera.getComponent(ƒ.ComponentCamera).mtxPivot.translation = new ƒ.Vector3(0, 100, 0);
         camera.getComponent(ƒ.ComponentCamera).mtxPivot.rotation = new ƒ.Vector3(90, 0, 0);
         graph.addChild(camera);
         let canvas = document.querySelector("canvas");
@@ -108,6 +133,9 @@ var Script;
     Script.start = start;
     function update(_event) {
         viewport.addEventListener("\u0192pointermove" /* MOVE */, hndPointerMove);
+        Script.GameState.get().player1 = Script.Player1count;
+        Script.GameState.get().player2 = Script.Player2count;
+        //console.log(Player1count)
         viewport.draw();
     }
     function hndPointerMove(_event) {
@@ -213,6 +241,7 @@ var Script;
                 }
                 let j = 0;
                 if (check == true) {
+                    let point = false;
                     for (j = 0; j < 64; j++) {
                         let x = 0;
                         let y = 0;
@@ -262,15 +291,18 @@ var Script;
                             //console.log("test player 1 field")
                             if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
                                 Script.cube.getComponent(StateMachine).transit(JOB.PLAYER2);
-                                check = false;
-                                turn = "Player2";
-                                break;
+                                point = true;
+                                //check = false
+                                //turn = "Player1"
+                                Script.Player1count += 1;
+                                //console.log("test",Player1count)
                             }
                             else if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
                                 Script.cube.getComponent(StateMachine).transit(JOB.PLAYER1);
-                                check = false;
-                                turn = "Player1";
-                                break;
+                                point = true;
+                                //check = false
+                                //turn = "Player2"
+                                Script.Player2count += 1;
                             }
                             //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
                             //turn = "Player2"
@@ -297,10 +329,20 @@ var Script;
                             }
                             if (turn == "Player2" && check == true) {
                                 turn = "Player1";
-                                //console.log("test1",check)
                                 check = false;
                             }
                         }
+                    }
+                    if (point == true) {
+                        if (turn == "Player1") {
+                            check = false;
+                            turn = "Player2";
+                        }
+                        else if (turn == "Player2") {
+                            check = false;
+                            turn = "Player1";
+                        }
+                        else { }
                     }
                     check = false;
                 }

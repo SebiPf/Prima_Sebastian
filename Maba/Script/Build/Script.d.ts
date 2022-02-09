@@ -9,9 +9,23 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒ = FudgeCore;
+    class GameState extends ƒ.Mutable {
+        private static controller;
+        private static instance;
+        player1: number;
+        player2: number;
+        private constructor();
+        static get(): GameState;
+        protected reduceMutator(_mutator: ƒ.Mutator): void;
+    }
+}
+declare namespace Script {
+    import ƒ = FudgeCore;
     let rayDistance: ƒ.Vector3;
     let line: ƒ.Node;
     let cube: ƒ.Node;
+    let Player1count: number;
+    let Player2count: number;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
     function hndMousclick(_event: any): void;

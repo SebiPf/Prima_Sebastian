@@ -35,7 +35,7 @@ namespace Script {
       }
       if(turn == "PLAYER1"){
         turn= "PLAYER2"      }
-        else if(turn == "PLAYER2"){
+      else if(turn == "PLAYER2"){
           turn= "PLAYER1"
         }
       
@@ -141,6 +141,7 @@ namespace Script {
       }
       let j: number = 0
       if (check == true) {
+        let point: boolean = false
         for (j = 0; j < 64; j++) {
           let x = 0
           let y = 0
@@ -187,19 +188,25 @@ namespace Script {
           linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
           linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
           linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+          
           if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2) ) {
             //console.log("test player 1 field")
             if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER2)
-              check = false
-              turn = "Player2"
-              break
+              point = true
+              //check = false
+              //turn = "Player1"
+              Player1count += 1
+              //console.log("test",Player1count)
+              
             }
             else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER1)
-              check = false
-              turn = "Player1"
-              break
+              point = true
+              //check = false
+              //turn = "Player2"
+              Player2count += 1
+              
             }
             
             //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
@@ -225,16 +232,31 @@ namespace Script {
             if(turn == "Player1"&&check == true){
               turn = "Player2"
               //console.log("test",check)
+              
               check = false
             }
             if(turn == "Player2"&&check == true){
               turn = "Player1"
-              //console.log("test1",check)
+              
               check = false
             }
 
           }
           
+          
+        }
+        if(point == true){
+          if(turn=="Player1"){
+            
+            check = false
+            turn = "Player2"
+          }
+          else if(turn=="Player2"){
+            
+            check = false
+            turn = "Player1"
+          }
+          else{}
         }
         check = false
       }

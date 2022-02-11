@@ -120,8 +120,6 @@ var Script;
             Script.cube = cubes.getChildrenByName("Cube")[i];
             Script.cube.addComponent(new Script.StateMachine());
         }
-        console.log(lines);
-        console.log(cubes);
         viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
         viewport.activatePointerEvent("\u0192pointermove" /* MOVE */, true);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);

@@ -75,8 +75,6 @@ namespace Script {
       cube = cubes.getChildrenByName("Cube")[i];
       cube.addComponent(new StateMachine());
     }
-    console.log(lines)
-    console.log(cubes)
     viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
     viewport.activatePointerEvent(ƒ.EVENT_POINTER.MOVE, true);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);

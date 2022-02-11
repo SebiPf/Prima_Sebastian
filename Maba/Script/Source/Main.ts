@@ -1,8 +1,9 @@
 //import { count } from "console";
-
+///<reference path="../../../Net/Build/Client/FudgeClient.d.ts"/>
 //import * as Mongo from "mongodb";
 namespace Script {
   import ƒ = FudgeCore;
+  //import fs = FudgeServer;
   ƒ.Debug.info("Main Program Template running!");
   let camera: ƒ.Node = new ƒ.Node("Cam1")
   let graph: ƒ.Graph;
@@ -16,36 +17,46 @@ namespace Script {
   let Base: ƒ.Node
   let lines: ƒ.Node
   let cubes: ƒ.Node
+
+  import ƒClient = FudgeNet.FudgeClient;
+  ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
+
+  // Create a FudgeClient for this browser tab
+  let client: ƒClient = new ƒClient();
+  // keep a list of known clients, updated with information from the server
+  let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
   //import * as Mongo from "mongodb";
   window.addEventListener("load", start);
 
-
+  //wss://fudge-server.herokuapp.com
   
   export async function start(_event: Event): Promise<void> {
     
-    /*const { MongoClient } = require('mongodb');
-    const uri = "mongodb+srv://Player1:Player1@maba.7ced4.mongodb.net/maba?retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    /*client.connect(err => {
-      const collection = client.db("test").collection("devices");
-      // perform actions on the collection object
-      client.close();
-    });
-    
-    async function run() {
-      try {
-        // Connect the client to the server
-        await client.connect();
-        // Establish and verify connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Connected successfully to server");
-      } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-      }
+    let domServer: string = "https://mabaprima.herokuapp.com"
+    try {
+      // connect to a server with the given url
+      client.connectToServer(domServer);
+      
+      // document.forms[0].querySelector("button#login").removeAttribute("disabled");
+      document.forms[0].querySelector("button#mesh").removeAttribute("disabled");
+      document.forms[0].querySelector("button#host").removeAttribute("disabled");
+      (<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
+      // install an event listener to be called when a message comes in
+      //client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
+    } catch (_error) {
+      console.log(_error);
+      console.log("Make sure, FudgeServer is running and accessable");
     }
-    run().catch(console.dir);
-*/
+
+
+
+
+
+
+
+
+
+
     window.addEventListener("click", change);
 
     await ƒ.Project.loadResourcesFromHTML();
@@ -91,6 +102,10 @@ namespace Script {
   export function hndMousclick(_event: any): void {
     ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
+  }
+  async function receiveMessage(_event: CustomEvent | MessageEvent): Promise<void> {
+    
+  return ;
   }
 
 }

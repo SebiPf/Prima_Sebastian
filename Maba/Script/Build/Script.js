@@ -83,7 +83,7 @@ var Script;
     // Create a FudgeClient for this browser tab
     let client = new ƒClient();
     // keep a list of known clients, updated with information from the server
-    let clientsKnown = {};
+    //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
     //import * as Mongo from "mongodb";
     window.addEventListener("load", start);
     //wss://fudge-server.herokuapp.com
@@ -151,7 +151,7 @@ var Script;
     }
     Script.hndMousclick = hndMousclick;
     async function receiveMessage(_event) {
-        return;
+        console.table(_event);
     }
 })(Script || (Script = {}));
 var Script;

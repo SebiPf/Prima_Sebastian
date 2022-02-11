@@ -24,7 +24,7 @@ namespace Script {
   // Create a FudgeClient for this browser tab
   let client: ƒClient = new ƒClient();
   // keep a list of known clients, updated with information from the server
-  let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
+  //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
   //import * as Mongo from "mongodb";
   window.addEventListener("load", start);
 
@@ -104,8 +104,7 @@ namespace Script {
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
   }
   async function receiveMessage(_event: CustomEvent | MessageEvent): Promise<void> {
-    
-  return ;
+      console.table(_event);
   }
 
 }

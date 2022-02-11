@@ -1,6 +1,6 @@
 ///<reference path="../Message.ts"/>
 ///<reference path="./RtcConnection.ts"/>
-///<reference path="C:\Coding\Prima_Sebastian\Maba\Script\Source\@types\FudgeCore.d.ts"/>
+///<reference path="../../../Maba/Script/Source/@types/FudgeCore.d.ts"/>
 namespace FudgeNet {
   import ƒ = FudgeCore;
 

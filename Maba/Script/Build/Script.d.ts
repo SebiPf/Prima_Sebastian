@@ -1,3 +1,4 @@
+/// <reference path="../../../Net/Build/Client/FudgeClient.d.ts" />
 declare namespace Script {
     import ƒ = FudgeCore;
     class CustomComponentScript extends ƒ.ComponentScript {

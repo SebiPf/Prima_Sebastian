@@ -32,7 +32,7 @@ namespace Script {
   
   export async function start(_event: Event): Promise<void> {
     
-    let domServer: string = "https://mabaprima.herokuapp.com"
+    let domServer: string = "wss://mabaprima.herokuapp.com"
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);

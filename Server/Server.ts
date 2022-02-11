@@ -1,7 +1,7 @@
 /**
  * Minimal implementation showing the use of the FudgeServer.  
  * Start with `node Server.js <port>`, Heroku uses the start-script in package.json
- * @author Jirka Dell'Oro-Friedl, HFU, 2021
+ * @author Sebastian
  */
 
 import { FudgeServer } from "../Net/Build/Server/FudgeServer.js";

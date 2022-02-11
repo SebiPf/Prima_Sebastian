@@ -4,7 +4,7 @@
  * @author Sebastian
  */
 
-import { FudgeServer } from "../Net/Build/Server/FudgeServer.js";
+import { FudgeServer } from "../../Net/Build/Server/FudgeServer.js";
 
 let port: number | string | undefined = process.env.PORT;
 if (port == undefined)

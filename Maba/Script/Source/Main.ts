@@ -32,16 +32,11 @@ namespace Script {
   
   export async function start(_event: Event): Promise<void> {
     
-    let domServer: string = "wss://mabaprima.herokuapp.com"
+    let domServer: string = "wss://mabaprima.herokuapp.com/"
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);
       
-      // document.forms[0].querySelector("button#login").removeAttribute("disabled");
-      document.forms[0].querySelector("button#mesh").removeAttribute("disabled");
-      document.forms[0].querySelector("button#host").removeAttribute("disabled");
-      (<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
-      // install an event listener to be called when a message comes in
       //client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     } catch (_error) {
       console.log(_error);

@@ -31,13 +31,11 @@ namespace Script {
 
   //wss://fudge-server.herokuapp.com
   export async function test(_event: Event): Promise<void> {
-
     window.addEventListener("click", start);
-    
-    
-
   }
   export async function start(_event: Event): Promise<void> {
+    let dia = document.getElementById("dia");
+    dia.hidden = true
     window.removeEventListener("click", start)
     let domServer: string = "ws://mabaprima.herokuapp.com/"
     try {

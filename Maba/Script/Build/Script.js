@@ -92,6 +92,8 @@ var Script;
     }
     Script.test = test;
     async function start(_event) {
+        let dia = document.getElementById("dia");
+        dia.hidden = true;
         window.removeEventListener("click", start);
         let domServer = "ws://mabaprima.herokuapp.com/";
         try {

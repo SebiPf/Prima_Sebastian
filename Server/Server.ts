@@ -16,5 +16,5 @@ if (!port) {
 }
 
 let server: FudgeServer = new FudgeServer();
-server.startUp(80);
+server.startUp(<number>port);
 console.log(server);

@@ -17,6 +17,7 @@ namespace Script {
   let Base: ƒ.Node
   let lines: ƒ.Node
   let cubes: ƒ.Node
+  
 
   import ƒClient = FudgeNet.FudgeClient;
   ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
@@ -74,7 +75,14 @@ namespace Script {
     for (let i = 0; i < 64; i++) {
       cube = cubes.getChildrenByName("Cube")[i];
       cube.addComponent(new StateMachine());
+      
     }
+    graph.addComponent(new ƒ.ComponentAudioListener())
+    ƒ.AudioManager.default.listenTo(graph)
+    ƒ.AudioManager.default.listenWith(graph.getComponent(ƒ.ComponentAudioListener))
+    graph.getComponent(ƒ.ComponentAudioListener)
+    graph.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Soundtrack.mp3"),true,true))
+    Base.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Score.wav"),false,false))
     viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
     viewport.activatePointerEvent(ƒ.EVENT_POINTER.MOVE, true);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
@@ -87,6 +95,7 @@ namespace Script {
     GameState.get().player2 = Player2count;
     //console.log(Player1count)
     viewport.draw();
+    ƒ.AudioManager.default.update();
   }
   export function hndPointerMove(_event: ƒ.EventPointer): void {
     ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));

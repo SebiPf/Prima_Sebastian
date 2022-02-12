@@ -197,12 +197,14 @@ namespace Script {
               //check = false
               //turn = "Player1"
               Player1count += 1
+              Base.getComponent(ƒ.ComponentAudio).play(true)
               //console.log("test",Player1count)
               
             }
             else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER1)
               point = true
+              Base.getComponent(ƒ.ComponentAudio).play(true)
               //check = false
               //turn = "Player2"
               Player2count += 1

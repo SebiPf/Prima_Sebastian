@@ -120,6 +120,12 @@ var Script;
             Script.cube = cubes.getChildrenByName("Cube")[i];
             Script.cube.addComponent(new Script.StateMachine());
         }
+        graph.addComponent(new ƒ.ComponentAudioListener());
+        ƒ.AudioManager.default.listenTo(graph);
+        ƒ.AudioManager.default.listenWith(graph.getComponent(ƒ.ComponentAudioListener));
+        graph.getComponent(ƒ.ComponentAudioListener);
+        graph.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Soundtrack.mp3"), true, true));
+        Base.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Score.wav"), false, false));
         viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
         viewport.activatePointerEvent("\u0192pointermove" /* MOVE */, true);
         ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, update);
@@ -132,6 +138,7 @@ var Script;
         Script.GameState.get().player2 = Script.Player2count;
         //console.log(Player1count)
         viewport.draw();
+        ƒ.AudioManager.default.update();
     }
     function hndPointerMove(_event) {
         ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
@@ -293,11 +300,13 @@ var Script;
                                 //check = false
                                 //turn = "Player1"
                                 Script.Player1count += 1;
+                                Base.getComponent(ƒ.ComponentAudio).play(true);
                                 //console.log("test",Player1count)
                             }
                             else if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
                                 Script.cube.getComponent(StateMachine).transit(JOB.PLAYER1);
                                 point = true;
+                                Base.getComponent(ƒ.ComponentAudio).play(true);
                                 //check = false
                                 //turn = "Player2"
                                 Script.Player2count += 1;

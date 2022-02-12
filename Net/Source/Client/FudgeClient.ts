@@ -27,7 +27,7 @@ namespace FudgeNet {
     /** 
      * Tries to connect to the server at the given url and installs the appropriate listeners
      */
-    public connectToServer = (_uri: string = "ws://localhost:8080") => {
+    public connectToServer = (_uri: string = "wss://mabaprima.herokuapp.com/") => {
       this.urlServer = _uri;
       this.socket = new WebSocket(_uri);
       this.addWebSocketEventListeners();

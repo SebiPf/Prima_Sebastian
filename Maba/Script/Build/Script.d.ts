@@ -27,9 +27,9 @@ declare namespace Script {
     let cube: ƒ.Node;
     let Player1count: number;
     let Player2count: number;
+    function test(_event: Event): Promise<void>;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
-    function hndMousclick(_event: any): void;
 }
 declare namespace Script {
     import ƒAid = FudgeAid;

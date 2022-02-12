@@ -23,22 +23,23 @@ namespace Script {
       Base = graph.getChildrenByName("Base")[0]
       lines = Base.getChildrenByName("Lines")[0]
       line = lines.getChildrenByName("Line")[i]
-      if(line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1){
+      if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
         line.getComponent(StateMachine).transit(JOB.PLAYER1)
         check = true
         //turn= "PLAYER2"
       }
-      else if(line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2){
+      else if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
         line.getComponent(StateMachine).transit(JOB.PLAYER2)
         check = true
         //turn= "PLAYER1"
       }
-      if(turn == "PLAYER1"){
-        turn= "PLAYER2"      }
-      else if(turn == "PLAYER2"){
-          turn= "PLAYER1"
-        }
-      
+      if (turn == "PLAYER1") {
+        turn = "PLAYER2"
+      }
+      else if (turn == "PLAYER2") {
+        turn = "PLAYER1"
+      }
+
     }
   }
   export class StateMachine extends ƒAid.ComponentStateMachine<JOB> {
@@ -55,7 +56,7 @@ namespace Script {
       this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
       this.addEventListener(ƒ.EVENT.COMPONENT_REMOVE, this.hndEvent);
       this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.hndEvent);
-      
+
     }
     public static get(): ƒAid.StateMachineInstructions<JOB> {
       let setup: ƒAid.StateMachineInstructions<JOB> = new ƒAid.StateMachineInstructions();
@@ -68,11 +69,11 @@ namespace Script {
     }
 
     private static async actIdle(_machine: StateMachine): Promise<void> {
-      if(_machine.node.getParent().name =="Lines"){
+      if (_machine.node.getParent().name == "Lines") {
         _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 0, 0, 255);
       }
-      else{
-      _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 255, 255, 255);
+      else {
+        _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 255, 255, 255);
       }
     }
     private static async actHoverd1(_machine: StateMachine): Promise<void> {
@@ -102,12 +103,12 @@ namespace Script {
         case ƒ.EVENT.NODE_DESERIALIZED:
       }
     }
-    
+
 
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-      
+
       //console.log("start for")
       for (i = 0; i < 144; i++) {
 
@@ -117,23 +118,23 @@ namespace Script {
         linestate = line.getComponent(StateMachine);
         let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
         if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
-          
-          if(turn == "Player1"){
-          
-          
+
+          if (turn == "Player1") {
+
+
             line.getComponent(StateMachine).transit(JOB.HOVERED1)
-          
-        }
-        else if(turn == "Player2"){
-          
-          
-        
+
+          }
+          else if (turn == "Player2") {
+
+
+
             line.getComponent(StateMachine).transit(JOB.HOVERED2)
-            
-          
+
+
+          }
         }
-        }
-        else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2&&linestate.stateCurrent != JOB.IDLE) {
+        else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
           line.getComponent(StateMachine).transit(JOB.IDLE)
           //break
         }
@@ -188,8 +189,8 @@ namespace Script {
           linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
           linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
           linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
-          
-          if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2) ) {
+
+          if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
             //console.log("test player 1 field")
             if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER2)
@@ -199,7 +200,7 @@ namespace Script {
               Player1count += 1
               Base.getComponent(ƒ.ComponentAudio).play(true)
               //console.log("test",Player1count)
-              
+
             }
             else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
               cube.getComponent(StateMachine).transit(JOB.PLAYER1)
@@ -208,12 +209,12 @@ namespace Script {
               //check = false
               //turn = "Player2"
               Player2count += 1
-              
+
             }
-            
+
             //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
             //turn = "Player2"
-            
+
           }
           /*else if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player2") {
             //console.log("test player 2 field")
@@ -229,36 +230,36 @@ namespace Script {
             //turn = "Player1"
             
           }*/
-          
+
           else {
-            if(turn == "Player1"&&check == true){
+            if (turn == "Player1" && check == true) {
               turn = "Player2"
               //console.log("test",check)
-              
+
               check = false
             }
-            if(turn == "Player2"&&check == true){
+            if (turn == "Player2" && check == true) {
               turn = "Player1"
-              
+
               check = false
             }
 
           }
-          
-          
+
+
         }
-        if(point == true){
-          if(turn=="Player1"){
-            
+        if (point == true) {
+          if (turn == "Player1") {
+
             check = false
             turn = "Player2"
           }
-          else if(turn=="Player2"){
-            
+          else if (turn == "Player2") {
+
             check = false
             turn = "Player1"
           }
-          else{}
+          else { }
         }
         check = false
       }

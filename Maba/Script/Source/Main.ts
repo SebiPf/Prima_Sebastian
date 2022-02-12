@@ -27,17 +27,23 @@ namespace Script {
   // keep a list of known clients, updated with information from the server
   //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
   //import * as Mongo from "mongodb";
-  window.addEventListener("load", start);
+  window.addEventListener("load", test);
 
   //wss://fudge-server.herokuapp.com
-  
-  export async function start(_event: Event): Promise<void> {
+  export async function test(_event: Event): Promise<void> {
+
+    window.addEventListener("click", start);
     
-    let domServer: string = "wss://mabaprima.herokuapp.com/"
+    
+
+  }
+  export async function start(_event: Event): Promise<void> {
+    window.removeEventListener("click", start)
+    let domServer: string = "ws://mabaprima.herokuapp.com/"
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);
-      
+      (<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
       //client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     } catch (_error) {
       console.log(_error);
@@ -101,10 +107,7 @@ namespace Script {
     ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
   }
-  export function hndMousclick(_event: any): void {
-    ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
-    rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
-  }
+  
   async function receiveMessage(_event: CustomEvent | MessageEvent): Promise<void> {
       console.table(_event);
   }

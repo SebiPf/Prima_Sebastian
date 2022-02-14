@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "FUDGE_Server starts on Heroku using this package.json",
   "main": "",
-  "scripts": {
-    "start": "node Server/Server.js"
-  },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sebipf/Prima_Sebastian.git"

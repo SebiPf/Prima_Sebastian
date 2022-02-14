@@ -3,7 +3,7 @@
  * Start with `node Server.js <port>`, Heroku uses the start-script in package.json
  * @author Sebastian
  */
-
+//@ts-ignore
 import { FudgeServer } from "./Server/FudgeServer.js";
 
 let port: number | string | undefined = process.env.PORT;

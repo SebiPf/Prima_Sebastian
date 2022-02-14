@@ -37,7 +37,7 @@ namespace Script {
     let dia = document.getElementById("dia");
     dia.hidden = true
     window.removeEventListener("click", start)
-    let domServer: string = "ws://mabaprima.herokuapp.com/"
+    let domServer: string = "wss://mabaprima.herokuapp.com/"
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);
@@ -47,14 +47,6 @@ namespace Script {
       console.log(_error);
       console.log("Make sure, FudgeServer is running and accessable");
     }
-
-
-
-
-
-
-
-
 
 
     window.addEventListener("click", change);

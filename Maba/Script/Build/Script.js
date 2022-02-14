@@ -95,7 +95,7 @@ var Script;
         let dia = document.getElementById("dia");
         dia.hidden = true;
         window.removeEventListener("click", start);
-        let domServer = "ws://mabaprima.herokuapp.com/";
+        let domServer = "wss://mabaprima.herokuapp.com/";
         try {
             // connect to a server with the given url
             client.connectToServer(domServer);

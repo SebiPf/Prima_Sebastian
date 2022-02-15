@@ -100,19 +100,17 @@ namespace Script {
 
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-    //message = JSON.stringify(message.content)
-    //let received = document.forms[1].querySelector("textarea#received");
-    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT && message.content.message != undefined) {
-      //Base = graph.getChildrenByName("Base")[0]
-      cubes = Base.getChildrenByName("Cubes")[0]
-      //cubes.getChildrenByName('Cube')[28].getComponent(StateMachine).transit(JOB.PLAYER2)
-      console.log("message: " + message.content.message)
-      eval(message.content.message);
+    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
 
-      console.log(message)
-      //console.log(received)
-      //let log = message.content.message;
-      //new Function(log)();
+      if(message.content.message.includes("a")){
+        let num = message.content.message.match(/\d+/)[0];
+
+        lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+      }
+      else{
+      //cubes = Base.getChildrenByName("Cubes")[0]
+      cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
+    }
     }
     //console.table(_event);
     //console.table("_event");

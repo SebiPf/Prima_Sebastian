@@ -26,6 +26,14 @@ namespace Script {
       line = lines.getChildrenByName("Line")[i]
       if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
         line.getComponent(StateMachine).transit(JOB.PLAYER1)
+
+        let inum = i.toString();
+        let message = inum
+        message = "a" + inum
+        console.log(message)
+        //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
+        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+
         check = true
         //turn= "PLAYER2"
       }
@@ -202,8 +210,8 @@ namespace Script {
               
               let jnum = j.toString();
             //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
-              let message = "cubes.getChildrenByName("+"'Cube'"+")["+jnum+"]"+".getComponent(StateMachine).transit(JOB.PLAYER2)"
-              cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
+              let message = jnum
+              //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
               client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
               console.log("test")
               Base.getComponent(ƒ.ComponentAudio).play(true)

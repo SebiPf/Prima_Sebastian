@@ -12,12 +12,13 @@ namespace Script {
   export let rayDistance: ƒ.Vector3 = new ƒ.Vector3(0, 0, 0)
   export let line: ƒ.Node
   export let cube: ƒ.Node
+  export let cubes: ƒ.Node
   export let Player1count = 0
   export let Player2count = 0
   let Base: ƒ.Node
   let lines: ƒ.Node
-  let cubes: ƒ.Node
   
+
 
   import ƒClient = FudgeNet.FudgeClient;
   ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
@@ -50,7 +51,7 @@ namespace Script {
 
 
     window.addEventListener("click", change);
-    
+
     await ƒ.Project.loadResourcesFromHTML();
     graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
@@ -71,14 +72,13 @@ namespace Script {
     for (let i = 0; i < 64; i++) {
       cube = cubes.getChildrenByName("Cube")[i];
       cube.addComponent(new StateMachine());
-      
     }
     graph.addComponent(new ƒ.ComponentAudioListener())
     ƒ.AudioManager.default.listenTo(graph)
     ƒ.AudioManager.default.listenWith(graph.getComponent(ƒ.ComponentAudioListener))
     graph.getComponent(ƒ.ComponentAudioListener)
-    graph.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Soundtrack.mp3"),true,true))
-    Base.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Score.wav"),false,false))
+    graph.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Soundtrack.mp3"), true, true))
+    Base.addComponent(new ƒ.ComponentAudio(new ƒ.Audio("././Sound/Score.wav"), false, false))
     viewport.initialize("Viewport", graph, camera.getComponent(ƒ.ComponentCamera), canvas);
     viewport.activatePointerEvent(ƒ.EVENT_POINTER.MOVE, true);
     ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, update);
@@ -97,18 +97,27 @@ namespace Script {
     ray = viewport.getRayFromClient(new ƒ.Vector2(_event.pointerX, _event.pointerY));
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
   }
-  
+
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT){
-        eval(message.content);
-        console.log(message.content)
+    //message = JSON.stringify(message.content)
+    //let received = document.forms[1].querySelector("textarea#received");
+    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT && message.content.message != undefined) {
+      //Base = graph.getChildrenByName("Base")[0]
+      cubes = Base.getChildrenByName("Cubes")[0]
+      //cubes.getChildrenByName('Cube')[28].getComponent(StateMachine).transit(JOB.PLAYER2)
+      console.log("message: " + message.content.message)
+      eval(message.content.message);
+
+      console.log(message)
+      //console.log(received)
+      //let log = message.content.message;
+      //new Function(log)();
     }
-      //console.table(_event);
-      //console.table("_event");
-      //let message = JSON.parse(_event.data);
-      //new Function(message)();
-      //console.log(Function)
+    //console.table(_event);
+    //console.table("_event");
+
+    //console.log(Function)
   }
 
 }

@@ -25,6 +25,7 @@ declare namespace Script {
     let rayDistance: ƒ.Vector3;
     let line: ƒ.Node;
     let cube: ƒ.Node;
+    let cubes: ƒ.Node;
     let Player1count: number;
     let Player2count: number;
     import ƒClient = FudgeNet.FudgeClient;

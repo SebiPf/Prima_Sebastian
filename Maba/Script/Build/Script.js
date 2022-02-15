@@ -77,7 +77,6 @@ var Script;
     Script.Player2count = 0;
     let Base;
     let lines;
-    let cubes;
     var ƒClient = FudgeNet.FudgeClient;
     ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
     // Create a FudgeClient for this browser tab
@@ -119,13 +118,13 @@ var Script;
         viewport = new ƒ.Viewport();
         Base = graph.getChildrenByName("Base")[0];
         lines = Base.getChildrenByName("Lines")[0];
-        cubes = Base.getChildrenByName("Cubes")[0];
+        Script.cubes = Base.getChildrenByName("Cubes")[0];
         for (let i = 0; i < 144; i++) {
             Script.line = lines.getChildrenByName("Line")[i];
             Script.line.addComponent(new Script.StateMachine());
         }
         for (let i = 0; i < 64; i++) {
-            Script.cube = cubes.getChildrenByName("Cube")[i];
+            Script.cube = Script.cubes.getChildrenByName("Cube")[i];
             Script.cube.addComponent(new Script.StateMachine());
         }
         graph.addComponent(new ƒ.ComponentAudioListener());
@@ -155,14 +154,21 @@ var Script;
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
         let message = JSON.parse(_event.data);
-        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-            eval(message.content);
-            console.log(message.content);
+        //message = JSON.stringify(message.content)
+        //let received = document.forms[1].querySelector("textarea#received");
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT && message.content.message != undefined) {
+            //Base = graph.getChildrenByName("Base")[0]
+            Script.cubes = Base.getChildrenByName("Cubes")[0];
+            //cubes.getChildrenByName('Cube')[28].getComponent(StateMachine).transit(JOB.PLAYER2)
+            console.log("message: " + message.content.message);
+            eval(message.content.message);
+            console.log(message);
+            //console.log(received)
+            //let log = message.content.message;
+            //new Function(log)();
         }
         //console.table(_event);
         //console.table("_event");
-        //let message = JSON.parse(_event.data);
-        //new Function(message)();
         //console.log(Function)
     }
 })(Script || (Script = {}));
@@ -315,6 +321,7 @@ var Script;
                                 let jnum = j.toString();
                                 //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
                                 let message = "cubes.getChildrenByName(" + "'Cube'" + ")[" + jnum + "]" + ".getComponent(StateMachine).transit(JOB.PLAYER2)";
+                                cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2);
                                 Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                 console.log("test");
                                 Base.getComponent(ƒ.ComponentAudio).play(true);

@@ -41,7 +41,7 @@ namespace Script {
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);
-      (<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
+      //(<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
       client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     } catch (_error) {
       console.log(_error);
@@ -99,11 +99,16 @@ namespace Script {
   }
   
   async function receiveMessage(_event) {
-      console.table(_event);
-      console.table("_event");
-      let message = JSON.parse(_event.data);
-      new Function(message)();
-      console.log(Function)
+    let message = JSON.parse(_event.data);
+    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT){
+        eval(message.content);
+        console.log(message.content)
+    }
+      //console.table(_event);
+      //console.table("_event");
+      //let message = JSON.parse(_event.data);
+      //new Function(message)();
+      //console.log(Function)
   }
 
 }

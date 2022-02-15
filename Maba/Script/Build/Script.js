@@ -99,7 +99,7 @@ var Script;
         try {
             // connect to a server with the given url
             Script.client.connectToServer(domServer);
-            document.forms[0].querySelector("input#id").value = Script.client.id;
+            //(<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
             Script.client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
         }
         catch (_error) {
@@ -154,11 +154,16 @@ var Script;
     }
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
-        console.table(_event);
-        console.table("_event");
         let message = JSON.parse(_event.data);
-        new Function(message)();
-        console.log(Function);
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+            eval(message.content);
+            console.log(message.content);
+        }
+        //console.table(_event);
+        //console.table("_event");
+        //let message = JSON.parse(_event.data);
+        //new Function(message)();
+        //console.log(Function)
     }
 })(Script || (Script = {}));
 var Script;
@@ -310,7 +315,7 @@ var Script;
                                 let jnum = j.toString();
                                 //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
                                 let message = "cubes.getChildrenByName(" + "'Cube'" + ")[" + jnum + "]" + ".getComponent(StateMachine).transit(JOB.PLAYER2)";
-                                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { text: message } });
+                                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                 console.log("test");
                                 Base.getComponent(ƒ.ComponentAudio).play(true);
                                 //console.log("test",Player1count)

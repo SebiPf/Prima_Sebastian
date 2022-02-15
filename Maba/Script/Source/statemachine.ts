@@ -203,7 +203,7 @@ namespace Script {
               let jnum = j.toString();
             //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
               let message = "cubes.getChildrenByName("+"'Cube'"+")["+jnum+"]"+".getComponent(StateMachine).transit(JOB.PLAYER2)"
-              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { text: message } });
+              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
               console.log("test")
               Base.getComponent(ƒ.ComponentAudio).play(true)
               //console.log("test",Player1count)

@@ -81,7 +81,7 @@ var Script;
     var ƒClient = FudgeNet.FudgeClient;
     ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
     // Create a FudgeClient for this browser tab
-    let client = new ƒClient();
+    Script.client = new ƒClient();
     // keep a list of known clients, updated with information from the server
     //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
     //import * as Mongo from "mongodb";
@@ -98,9 +98,9 @@ var Script;
         let domServer = "wss://mabaprima.herokuapp.com/";
         try {
             // connect to a server with the given url
-            client.connectToServer(domServer);
-            document.forms[0].querySelector("input#id").value = client.id;
-            //client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
+            Script.client.connectToServer(domServer);
+            document.forms[0].querySelector("input#id").value = Script.client.id;
+            Script.client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
         }
         catch (_error) {
             console.log(_error);
@@ -155,6 +155,10 @@ var Script;
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
         console.table(_event);
+        console.table("_event");
+        let message = JSON.parse(_event.data);
+        new Function(message)();
+        console.log(Function);
     }
 })(Script || (Script = {}));
 var Script;
@@ -298,11 +302,16 @@ var Script;
                         if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                             //console.log("test player 1 field")
                             if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
-                                Script.cube.getComponent(StateMachine).transit(JOB.PLAYER2);
+                                //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
                                 point = true;
                                 //check = false
                                 //turn = "Player1"
                                 Script.Player1count += 1;
+                                let jnum = j.toString();
+                                //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
+                                let message = "cubes.getChildrenByName(" + "'Cube'" + ")[" + jnum + "]" + ".getComponent(StateMachine).transit(JOB.PLAYER2)";
+                                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { text: message } });
+                                console.log("test");
                                 Base.getComponent(ƒ.ComponentAudio).play(true);
                                 //console.log("test",Player1count)
                             }

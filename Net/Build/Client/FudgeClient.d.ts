@@ -1,4 +1,4 @@
-/// <reference path="../../../Core/Build/FudgeCore.d.ts" />
+import ƒ = FudgeCore;
 declare namespace FudgeNet {
     enum COMMAND {
         UNDEFINED = "undefined",

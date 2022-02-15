@@ -13,6 +13,7 @@ namespace Script {
   let linestatec: StateMachine
   let linestated: StateMachine
   let check = false;
+  
   export let col: boolean
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
   export enum JOB {
@@ -108,7 +109,7 @@ namespace Script {
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-
+     
       //console.log("start for")
       for (i = 0; i < 144; i++) {
 
@@ -193,11 +194,17 @@ namespace Script {
           if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
             //console.log("test player 1 field")
             if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
-              cube.getComponent(StateMachine).transit(JOB.PLAYER2)
+              //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
               point = true
               //check = false
               //turn = "Player1"
               Player1count += 1
+              
+              let jnum = j.toString();
+            //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
+              let message = "cubes.getChildrenByName("+"'Cube'"+")["+jnum+"]"+".getComponent(StateMachine).transit(JOB.PLAYER2)"
+              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { text: message } });
+              console.log("test")
               Base.getComponent(ƒ.ComponentAudio).play(true)
               //console.log("test",Player1count)
 

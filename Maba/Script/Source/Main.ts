@@ -23,7 +23,7 @@ namespace Script {
   ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
 
   // Create a FudgeClient for this browser tab
-  let client: ƒClient = new ƒClient();
+  export let client: ƒClient = new ƒClient();
   // keep a list of known clients, updated with information from the server
   //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
   //import * as Mongo from "mongodb";
@@ -42,7 +42,7 @@ namespace Script {
       // connect to a server with the given url
       client.connectToServer(domServer);
       (<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
-      //client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
+      client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     } catch (_error) {
       console.log(_error);
       console.log("Make sure, FudgeServer is running and accessable");
@@ -50,7 +50,7 @@ namespace Script {
 
 
     window.addEventListener("click", change);
-
+    
     await ƒ.Project.loadResourcesFromHTML();
     graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
     document.addEventListener("interactiveViewportStarted", <EventListener>start);
@@ -98,8 +98,12 @@ namespace Script {
     rayDistance = ray.intersectPlane(new ƒ.Vector3(0, 1, 0), new ƒ.Vector3(0, 1, 0))
   }
   
-  async function receiveMessage(_event: CustomEvent | MessageEvent): Promise<void> {
+  async function receiveMessage(_event) {
       console.table(_event);
+      console.table("_event");
+      let message = JSON.parse(_event.data);
+      new Function(message)();
+      console.log(Function)
   }
 
 }

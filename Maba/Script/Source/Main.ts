@@ -96,12 +96,14 @@ namespace Script {
       Player = "Player1"
       let status = document.getElementById("status");
       status.hidden = true
+
     }
     else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])){
-      Player = "Player1"
+      Player = "Player2"
       let status = document.getElementById("status");
       status.hidden = true
     }
+    //console.log(Player)
     //console.log(Player1count)
     viewport.draw();
     ƒ.AudioManager.default.update();
@@ -112,12 +114,12 @@ namespace Script {
   }
 
   async function receiveMessage(_event) {
-
+    let message = JSON.parse(_event.data);
     switch(Player){
       
       case "Player1":
 
-        let message = JSON.parse(_event.data);
+        
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
     
           if(message.content.message.includes("linenum")){
@@ -134,7 +136,7 @@ namespace Script {
         }
         }
       case "Player2":
-        message = JSON.parse(_event.data);
+        
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
     
           if(message.content.message.includes("linenum")){

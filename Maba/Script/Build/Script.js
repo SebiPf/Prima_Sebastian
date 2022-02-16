@@ -150,10 +150,11 @@ var Script;
             status.hidden = true;
         }
         else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])) {
-            Script.Player = "Player1";
+            Script.Player = "Player2";
             let status = document.getElementById("status");
             status.hidden = true;
         }
+        //console.log(Player)
         //console.log(Player1count)
         viewport.draw();
         ƒ.AudioManager.default.update();
@@ -164,9 +165,9 @@ var Script;
     }
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
+        let message = JSON.parse(_event.data);
         switch (Script.Player) {
             case "Player1":
-                let message = JSON.parse(_event.data);
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
                     if (message.content.message.includes("linenum")) {
                         let num = message.content.message.match(/\d+/)[0];
@@ -181,7 +182,6 @@ var Script;
                     }
                 }
             case "Player2":
-                message = JSON.parse(_event.data);
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
                     if (message.content.message.includes("linenum")) {
                         let num = message.content.message.match(/\d+/)[0];
@@ -276,6 +276,8 @@ var Script;
             this.update = (_event) => {
                 graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
                 let i = 0;
+                let j = 0;
+                //console.log(Player)
                 switch (Script.Player) {
                     case "Player1":
                         for (i = 0; i < 144; i++) {
@@ -291,7 +293,6 @@ var Script;
                                 Script.line.getComponent(StateMachine).transit(JOB.IDLE);
                             }
                         }
-                        let j = 0;
                         if (check == true) {
                             let point = false;
                             for (j = 0; j < 64; j++) {
@@ -383,7 +384,9 @@ var Script;
                             check = false;
                         }
                         this.act();
+                        break;
                     case "Player2":
+                        //console.log("test")
                         for (i = 0; i < 144; i++) {
                             Base = graph.getChildrenByName("Base")[0];
                             lines = Base.getChildrenByName("Lines")[0];
@@ -399,7 +402,6 @@ var Script;
                             }
                             //console.log(line.getComponent(StateMachine).stateCurrent)
                         }
-                        j = 0;
                         if (check == true) {
                             let point = false;
                             for (j = 0; j < 64; j++) {
@@ -489,6 +491,7 @@ var Script;
                             check = false;
                         }
                         this.act();
+                        break;
                 }
             };
             this.instructions = StateMachine.instructions; // setup instructions with the static set

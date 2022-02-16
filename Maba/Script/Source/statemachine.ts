@@ -117,6 +117,8 @@ namespace Script {
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
+      let j: number = 0
+      //console.log(Player)
       switch (Player){
         case "Player1":
           for (i = 0; i < 144; i++) {
@@ -132,7 +134,7 @@ namespace Script {
               line.getComponent(StateMachine).transit(JOB.IDLE)
             }
           }
-          let j: number = 0
+          
           if (check == true) {
             let point: boolean = false
             for (j = 0; j < 64; j++) {
@@ -227,7 +229,9 @@ namespace Script {
             check = false
           }
           this.act();
+          break;
         case "Player2":
+          //console.log("test")
           for (i = 0; i < 144; i++) {
 
             Base = graph.getChildrenByName("Base")[0]
@@ -236,8 +240,6 @@ namespace Script {
             linestate = line.getComponent(StateMachine);
             let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
             if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
-    
-              
                 line.getComponent(StateMachine).transit(JOB.HOVERED2)
             }
             else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
@@ -246,7 +248,6 @@ namespace Script {
             }
             //console.log(line.getComponent(StateMachine).stateCurrent)
           }
-          j = 0
           if (check == true) {
             let point: boolean = false
             for (j = 0; j < 64; j++) {
@@ -340,6 +341,7 @@ namespace Script {
           }
         
           this.act();
+          break;
       }
     }
   

@@ -135,6 +135,7 @@ namespace Script {
           cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
         }
         }
+        break
       case "Player2":
         
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
@@ -152,7 +153,7 @@ namespace Script {
           cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER1)
         }
         }
-
+        break
     }
 
 

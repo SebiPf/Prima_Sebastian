@@ -181,6 +181,7 @@ var Script;
                         Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     }
                 }
+                break;
             case "Player2":
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
                     if (message.content.message.includes("linenum")) {
@@ -195,6 +196,7 @@ var Script;
                         Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     }
                 }
+                break;
         }
         //console.table(_event);
         //console.table("_event");

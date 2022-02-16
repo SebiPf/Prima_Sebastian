@@ -91,12 +91,12 @@ namespace Script {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     GameState.get().player1 = Player1count;
     GameState.get().player2 = Player2count;
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ONE])){
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A])){
       turn = "Player1"
       let player = document.getElementById("player");
       player.hidden = true
     }
-    else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.TWO])){
+    else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])){
       turn = "Player1"
       let player = document.getElementById("player");
       player.hidden = true

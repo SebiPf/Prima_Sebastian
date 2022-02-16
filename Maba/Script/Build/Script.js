@@ -153,16 +153,31 @@ var Script;
     }
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
-        let message = JSON.parse(_event.data);
-        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-            if (message.content.message.includes("a")) {
-                let num = message.content.message.match(/\d+/)[0];
-                lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
-            }
-            else {
-                //cubes = Base.getChildrenByName("Cubes")[0]
-                Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
-            }
+        switch (Script.turn) {
+            case "Player1":
+                let message = JSON.parse(_event.data);
+                if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+                    if (message.content.message.includes("a")) {
+                        let num = message.content.message.match(/\d+/)[0];
+                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                    }
+                    else {
+                        //cubes = Base.getChildrenByName("Cubes")[0]
+                        Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                    }
+                }
+            case "Player2":
+                message = JSON.parse(_event.data);
+                if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+                    if (message.content.message.includes("a")) {
+                        let num = message.content.message.match(/\d+/)[0];
+                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                    }
+                    else {
+                        //cubes = Base.getChildrenByName("Cubes")[0]
+                        Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                    }
+                }
         }
         //console.table(_event);
         //console.table("_event");
@@ -177,7 +192,7 @@ var Script;
     let graph;
     let lines;
     let cubes;
-    let turn = "Player1";
+    Script.turn = "Player1";
     let Base;
     let linestate;
     let linestatea;
@@ -215,11 +230,11 @@ var Script;
                 check = true;
                 //turn= "PLAYER1"
             }
-            if (turn == "PLAYER1") {
-                turn = "PLAYER2";
+            if (Script.turn == "PLAYER1") {
+                Script.turn = "PLAYER2";
             }
-            else if (turn == "PLAYER2") {
-                turn = "PLAYER1";
+            else if (Script.turn == "PLAYER2") {
+                Script.turn = "PLAYER1";
             }
         }
     }
@@ -252,10 +267,10 @@ var Script;
                     linestate = Script.line.getComponent(StateMachine);
                     let posLocal = ƒ.Vector3.TRANSFORMATION(Script.rayDistance, Script.line.mtxWorldInverse, true);
                     if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
-                        if (turn == "Player1") {
+                        if (Script.turn == "Player1") {
                             Script.line.getComponent(StateMachine).transit(JOB.HOVERED1);
                         }
-                        else if (turn == "Player2") {
+                        else if (Script.turn == "Player2") {
                             Script.line.getComponent(StateMachine).transit(JOB.HOVERED2);
                         }
                     }
@@ -315,7 +330,7 @@ var Script;
                         linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
                         if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                             //console.log("test player 1 field")
-                            if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
+                            if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player1") {
                                 //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
                                 point = true;
                                 //check = false
@@ -330,7 +345,7 @@ var Script;
                                 Base.getComponent(ƒ.ComponentAudio).play(true);
                                 //console.log("test",Player1count)
                             }
-                            else if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+                            else if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
                                 Script.cube.getComponent(StateMachine).transit(JOB.PLAYER1);
                                 point = true;
                                 Base.getComponent(ƒ.ComponentAudio).play(true);
@@ -356,25 +371,25 @@ var Script;
                           
                         }*/
                         else {
-                            if (turn == "Player1" && check == true) {
-                                turn = "Player2";
+                            if (Script.turn == "Player1" && check == true) {
+                                Script.turn = "Player2";
                                 //console.log("test",check)
                                 check = false;
                             }
-                            if (turn == "Player2" && check == true) {
-                                turn = "Player1";
+                            if (Script.turn == "Player2" && check == true) {
+                                Script.turn = "Player1";
                                 check = false;
                             }
                         }
                     }
                     if (point == true) {
-                        if (turn == "Player1") {
+                        if (Script.turn == "Player1") {
                             check = false;
-                            turn = "Player2";
+                            Script.turn = "Player2";
                         }
-                        else if (turn == "Player2") {
+                        else if (Script.turn == "Player2") {
                             check = false;
-                            turn = "Player1";
+                            Script.turn = "Player1";
                         }
                         else { }
                     }

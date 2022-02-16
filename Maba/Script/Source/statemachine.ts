@@ -5,7 +5,7 @@ namespace Script {
   let graph: ƒ.Graph;
   let lines: ƒ.Node
   let cubes: ƒ.Node
-  let turn: String = "Player1"
+  export let turn: String = "Player1"
   let Base: ƒ.Node
   let linestate: StateMachine
   let linestatea: StateMachine
@@ -29,7 +29,7 @@ namespace Script {
 
         let inum = i.toString();
         let message = inum
-        message = "a" + inum
+        message = "linenum" + inum
         console.log(message)
         //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
         client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
@@ -117,169 +117,231 @@ namespace Script {
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-     
-      //console.log("start for")
-      for (i = 0; i < 144; i++) {
-
-        Base = graph.getChildrenByName("Base")[0]
-        lines = Base.getChildrenByName("Lines")[0]
-        line = lines.getChildrenByName("Line")[i]
-        linestate = line.getComponent(StateMachine);
-        let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
-        if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
-
-          if (turn == "Player1") {
-
-
-            line.getComponent(StateMachine).transit(JOB.HOVERED1)
-
+      switch (turn){
+        case "Player1":
+          for (i = 0; i < 144; i++) {
+            Base = graph.getChildrenByName("Base")[0]
+            lines = Base.getChildrenByName("Lines")[0]
+            line = lines.getChildrenByName("Line")[i]
+            linestate = line.getComponent(StateMachine);
+            let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
+            if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
+              line.getComponent(StateMachine).transit(JOB.HOVERED1)
+            }
+            else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
+              line.getComponent(StateMachine).transit(JOB.IDLE)
+            }
           }
-          else if (turn == "Player2") {
+          let j: number = 0
+          if (check == true) {
+            let point: boolean = false
+            for (j = 0; j < 64; j++) {
+              let x = 0
+              let y = 0
+              if (j < 8) {
+                x = 72
+                y = 73
+              }
+              else if (j < 16 && j > 7) {
+                x = 73
+                y = 74
+              }
+              else if (j < 24 && j > 15) {
+                x = 74
+                y = 75
+              }
+              else if (j < 32 && j > 23) {
+                x = 75
+                y = 76
+              }
+              else if (j < 40 && j > 31) {
+                x = 76
+                y = 77
+              }
+              else if (j < 48 && j > 39) {
+                x = 77
+                y = 78
+              }
+              else if (j < 56 && j > 47) {
+                x = 78
+                y = 79
+              }
+              else if (j < 64 && j > 55) {
+                x = 79
+                y = 80
+              }
+    
+              Base = graph.getChildrenByName("Base")[0]
+              cubes = Base.getChildrenByName("Cubes")[0]
+              lines = Base.getChildrenByName("Lines")[0]
+              cube = cubes.getChildrenByName("Cube")[j]
+              line = lines.getChildrenByName("Line")[j]
+              //console.log(cube);
+              linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+              linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+              linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+              linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+    
+              if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
+                  point = true
+                  Player1count += 1
+                  let jnum = j.toString();
+                  let message = jnum
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                  console.log("test")
+                  Base.getComponent(ƒ.ComponentAudio).play(true)
+                }
+              }
+              else {
+                if (turn == "Player1" && check == true) {
+                  turn = "Player2"
+                  let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                  check = false
+                }
+                if (turn == "Player2" && check == true) {
+                  turn = "Player1"
+                  let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                  check = false
+                }
+              }
+            }
+            if (point == true) {
+              if (turn == "Player1") {
+                check = false
+                turn = "Player2"
+                let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+              }
+              else if (turn == "Player2") {
+    
+                check = false
+                turn = "Player1"
+                let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+              }
+              else { }
+            }
+            check = false
+          }
+          this.act();
+        case "Player2":
+          for (i = 0; i < 144; i++) {
 
-
-
-            line.getComponent(StateMachine).transit(JOB.HOVERED2)
-
-
-          }
-        }
-        else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
-          line.getComponent(StateMachine).transit(JOB.IDLE)
-          //break
-        }
-        //console.log(line.getComponent(StateMachine).stateCurrent)
-      }
-      let j: number = 0
-      if (check == true) {
-        let point: boolean = false
-        for (j = 0; j < 64; j++) {
-          let x = 0
-          let y = 0
-          if (j < 8) {
-            x = 72
-            y = 73
-          }
-          else if (j < 16 && j > 7) {
-            x = 73
-            y = 74
-          }
-          else if (j < 24 && j > 15) {
-            x = 74
-            y = 75
-          }
-          else if (j < 32 && j > 23) {
-            x = 75
-            y = 76
-          }
-          else if (j < 40 && j > 31) {
-            x = 76
-            y = 77
-          }
-          else if (j < 48 && j > 39) {
-            x = 77
-            y = 78
-          }
-          else if (j < 56 && j > 47) {
-            x = 78
-            y = 79
-          }
-          else if (j < 64 && j > 55) {
-            x = 79
-            y = 80
-          }
-
-          Base = graph.getChildrenByName("Base")[0]
-          cubes = Base.getChildrenByName("Cubes")[0]
-          lines = Base.getChildrenByName("Lines")[0]
-          cube = cubes.getChildrenByName("Cube")[j]
-          line = lines.getChildrenByName("Line")[j]
-          //console.log(cube);
-          linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
-          linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
-          linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
-          linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
-
-          if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-            //console.log("test player 1 field")
-            if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
-              //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
-              point = true
-              //check = false
-              //turn = "Player1"
-              Player1count += 1
+            Base = graph.getChildrenByName("Base")[0]
+            lines = Base.getChildrenByName("Lines")[0]
+            line = lines.getChildrenByName("Line")[i]
+            linestate = line.getComponent(StateMachine);
+            let posLocal: ƒ.Vector3 = ƒ.Vector3.TRANSFORMATION(rayDistance, line.mtxWorldInverse, true);
+            if (posLocal.x > (-0.5) && posLocal.x < (0.5) && posLocal.z < (0.5) && posLocal.z > (-0.5) && linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2) {
+    
               
-              let jnum = j.toString();
-            //cubes.getChildrenByName("Cube")[j].getComponent(StateMachine).transit(JOB.PLAYER2)
-              let message = jnum
-              //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
-              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-              console.log("test")
-              Base.getComponent(ƒ.ComponentAudio).play(true)
-              //console.log("test",Player1count)
-
+                line.getComponent(StateMachine).transit(JOB.HOVERED2)
             }
-            else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
-              cube.getComponent(StateMachine).transit(JOB.PLAYER1)
-              point = true
-              Base.getComponent(ƒ.ComponentAudio).play(true)
-              //check = false
-              //turn = "Player2"
-              Player2count += 1
-
+            else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
+              line.getComponent(StateMachine).transit(JOB.IDLE)
+              //break
             }
-
-            //cube.getComponent(StateMachine).transit(JOB.PLAYER2)
-            //turn = "Player2"
-
+            //console.log(line.getComponent(StateMachine).stateCurrent)
           }
-          /*else if ((lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[j].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && (lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && turn == "Player2") {
-            //console.log("test player 2 field")
-            if (cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER2 && cube.getComponent(StateMachine).stateCurrent != JOB.PLAYER1) {
-              cube.getComponent(StateMachine).transit(JOB.PLAYER1)
-              check = false
-              turn = "Player1"
-              break
+          j = 0
+          if (check == true) {
+            let point: boolean = false
+            for (j = 0; j < 64; j++) {
+              let x = 0
+              let y = 0
+              if (j < 8) {
+                x = 72
+                y = 73
+              }
+              else if (j < 16 && j > 7) {
+                x = 73
+                y = 74
+              }
+              else if (j < 24 && j > 15) {
+                x = 74
+                y = 75
+              }
+              else if (j < 32 && j > 23) {
+                x = 75
+                y = 76
+              }
+              else if (j < 40 && j > 31) {
+                x = 76
+                y = 77
+              }
+              else if (j < 48 && j > 39) {
+                x = 77
+                y = 78
+              }
+              else if (j < 56 && j > 47) {
+                x = 78
+                y = 79
+              }
+              else if (j < 64 && j > 55) {
+                x = 79
+                y = 80
+              }
+    
+              Base = graph.getChildrenByName("Base")[0]
+              cubes = Base.getChildrenByName("Cubes")[0]
+              lines = Base.getChildrenByName("Lines")[0]
+              cube = cubes.getChildrenByName("Cube")[j]
+              line = lines.getChildrenByName("Line")[j]
+              //console.log(cube);
+              linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+              linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+              linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+              linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+    
+              if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
+                //console.log("test player 1 field")
+                
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+                  cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+                  point = true
+                  Base.getComponent(ƒ.ComponentAudio).play(true)
+                  Player2count += 1
+                }
+              }
+              else {
+                if (turn == "Player1" && check == true) {
+                  turn = "Player2"
+                  let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                  check = false
+                }
+                if (turn == "Player2" && check == true) {
+                  turn = "Player1"
+                  let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                  check = false
+                }
+              }
             }
-            
-
-            //cube.getComponent(StateMachine).transit(JOB.PLAYER1) 
-            //turn = "Player1"
-            
-          }*/
-
-          else {
-            if (turn == "Player1" && check == true) {
-              turn = "Player2"
-              //console.log("test",check)
-
-              check = false
+            if (point == true) {
+              if (turn == "Player1") {
+                check = false
+                turn = "Player2"
+                let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+              }
+              else if (turn == "Player2") {
+                check = false
+                turn = "Player1"
+                let message = turn
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+              }
+              else { }
             }
-            if (turn == "Player2" && check == true) {
-              turn = "Player1"
-
-              check = false
-            }
-
-          }
-
-
-        }
-        if (point == true) {
-          if (turn == "Player1") {
-
             check = false
-            turn = "Player2"
           }
-          else if (turn == "Player2") {
-
-            check = false
-            turn = "Player1"
-          }
-          else { }
-        }
-        check = false
+        
+          this.act();
       }
-      this.act();
     }
+  
   }
 }

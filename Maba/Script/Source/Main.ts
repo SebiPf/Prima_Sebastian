@@ -18,6 +18,7 @@ namespace Script {
   let Base: ƒ.Node
   let lines: ƒ.Node
   
+  
 
 
   import ƒClient = FudgeNet.FudgeClient;
@@ -42,6 +43,7 @@ namespace Script {
     try {
       // connect to a server with the given url
       client.connectToServer(domServer);
+      
       //(<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
       client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
     } catch (_error) {
@@ -89,6 +91,16 @@ namespace Script {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     GameState.get().player1 = Player1count;
     GameState.get().player2 = Player2count;
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.ONE])){
+      turn = "Player1"
+      let player = document.getElementById("player");
+      player.hidden = true
+    }
+    else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.TWO])){
+      turn = "Player1"
+      let player = document.getElementById("player");
+      player.hidden = true
+    }
     //console.log(Player1count)
     viewport.draw();
     ƒ.AudioManager.default.update();
@@ -99,19 +111,49 @@ namespace Script {
   }
 
   async function receiveMessage(_event) {
-    let message = JSON.parse(_event.data);
-    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
 
-      if(message.content.message.includes("a")){
-        let num = message.content.message.match(/\d+/)[0];
+    switch(turn){
+      
+      case "Player1":
 
-        lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
-      }
-      else{
-      //cubes = Base.getChildrenByName("Cubes")[0]
-      cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
+        let message = JSON.parse(_event.data);
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+    
+          if(message.content.message.includes("linenum")){
+            let num = message.content.message.match(/\d+/)[0];
+    
+            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+          }
+          else if(message.content.message.includes("Player")){
+            turn= message.content.message
+          }
+          else{
+          //cubes = Base.getChildrenByName("Cubes")[0]
+          cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
+        }
+        }
+      case "Player2":
+        message = JSON.parse(_event.data);
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+    
+          if(message.content.message.includes("linenum")){
+            let num = message.content.message.match(/\d+/)[0];
+    
+            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+          }
+          else if(message.content.message.includes("Player")){
+            turn= message.content.message
+          }
+          else{
+          //cubes = Base.getChildrenByName("Cubes")[0]
+          cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER1)
+        }
+        }
+
     }
-    }
+
+
+    
     //console.table(_event);
     //console.table("_event");
 

@@ -36,6 +36,7 @@ declare namespace Script {
 }
 declare namespace Script {
     import ƒAid = FudgeAid;
+    let turn: String;
     let col: boolean;
     enum JOB {
         IDLE = 0,

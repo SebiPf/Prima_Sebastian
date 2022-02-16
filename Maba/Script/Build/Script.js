@@ -249,9 +249,11 @@ var Script;
             }
             if (Script.turn == "PLAYER1") {
                 Script.turn = "PLAYER2";
+                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
             }
             else if (Script.turn == "PLAYER2") {
                 Script.turn = "PLAYER1";
+                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
             }
         }
     }

@@ -42,11 +42,13 @@ namespace Script {
         check = true
         //turn= "PLAYER1"
       }
-      if (turn == "PLAYER1") {
+      if (turn == "PLAYER1") {        
         turn = "PLAYER2"
+        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
       }
       else if (turn == "PLAYER2") {
         turn = "PLAYER1"
+        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
       }
 
     }

@@ -28,6 +28,7 @@ declare namespace Script {
     let cubes: ƒ.Node;
     let Player1count: number;
     let Player2count: number;
+    let Player: string;
     import ƒClient = FudgeNet.FudgeClient;
     let client: ƒClient;
     function test(_event: Event): Promise<void>;

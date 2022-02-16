@@ -75,6 +75,7 @@ var Script;
     Script.rayDistance = new ƒ.Vector3(0, 0, 0);
     Script.Player1count = 0;
     Script.Player2count = 0;
+    Script.Player = "Player1";
     let Base;
     let lines;
     var ƒClient = FudgeNet.FudgeClient;
@@ -144,14 +145,14 @@ var Script;
         Script.GameState.get().player1 = Script.Player1count;
         Script.GameState.get().player2 = Script.Player2count;
         if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A])) {
-            Script.turn = "Player1";
-            let player = document.getElementById("player");
-            player.hidden = true;
+            Script.Player = "Player1";
+            let status = document.getElementById("status");
+            status.hidden = true;
         }
         else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])) {
-            Script.turn = "Player1";
-            let player = document.getElementById("player");
-            player.hidden = true;
+            Script.Player = "Player1";
+            let status = document.getElementById("status");
+            status.hidden = true;
         }
         //console.log(Player1count)
         viewport.draw();
@@ -163,7 +164,7 @@ var Script;
     }
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
-        switch (Script.turn) {
+        switch (Script.Player) {
             case "Player1":
                 let message = JSON.parse(_event.data);
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
@@ -275,7 +276,7 @@ var Script;
             this.update = (_event) => {
                 graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
                 let i = 0;
-                switch (Script.turn) {
+                switch (Script.Player) {
                     case "Player1":
                         for (i = 0; i < 144; i++) {
                             Base = graph.getChildrenByName("Base")[0];

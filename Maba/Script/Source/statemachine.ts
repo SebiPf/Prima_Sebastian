@@ -117,7 +117,7 @@ namespace Script {
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-      switch (turn){
+      switch (Player){
         case "Player1":
           for (i = 0; i < 144; i++) {
             Base = graph.getChildrenByName("Base")[0]

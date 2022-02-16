@@ -15,6 +15,7 @@ namespace Script {
   export let cubes: ƒ.Node
   export let Player1count = 0
   export let Player2count = 0
+  export let Player = "Player1"
   let Base: ƒ.Node
   let lines: ƒ.Node
   
@@ -92,14 +93,14 @@ namespace Script {
     GameState.get().player1 = Player1count;
     GameState.get().player2 = Player2count;
     if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A])){
-      turn = "Player1"
-      let player = document.getElementById("player");
-      player.hidden = true
+      Player = "Player1"
+      let status = document.getElementById("status");
+      status.hidden = true
     }
     else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])){
-      turn = "Player1"
-      let player = document.getElementById("player");
-      player.hidden = true
+      Player = "Player1"
+      let status = document.getElementById("status");
+      status.hidden = true
     }
     //console.log(Player1count)
     viewport.draw();
@@ -112,7 +113,7 @@ namespace Script {
 
   async function receiveMessage(_event) {
 
-    switch(turn){
+    switch(Player){
       
       case "Player1":
 

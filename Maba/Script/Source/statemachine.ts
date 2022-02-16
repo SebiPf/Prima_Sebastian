@@ -121,6 +121,7 @@ namespace Script {
       let i: number = 0
       let j: number = 0
       //console.log(Player)
+      if (turn == Player){
       switch (Player){
         case "Player1":
           for (i = 0; i < 144; i++) {
@@ -345,6 +346,7 @@ namespace Script {
           this.act();
           break;
       }
+    }
     }
   
   }

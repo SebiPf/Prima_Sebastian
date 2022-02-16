@@ -356,7 +356,8 @@ var Script;
                                     linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
                                     linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
                                     if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player1") {
+                                        console.log("test");
+                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
                                             point = true;
                                             Script.Player1count += 1;
                                             let jnum = j.toString();
@@ -468,7 +469,8 @@ var Script;
                                     linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
                                     if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                                         //console.log("test player 1 field")
-                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
+                                        console.log("test");
+                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player1") {
                                             point = true;
                                             Script.Player1count += 1;
                                             let jnum = j.toString();

@@ -193,7 +193,8 @@ namespace Script {
               linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
     
               if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
+                console.log("test")
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
                   point = true
                   Player1count += 1
                   let jnum = j.toString();
@@ -309,8 +310,8 @@ namespace Script {
     
               if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                 //console.log("test player 1 field")
-                
-                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+                console.log("test")
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
 
                   point = true
                   Player1count += 1

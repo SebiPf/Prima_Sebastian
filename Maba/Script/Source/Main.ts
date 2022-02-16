@@ -130,6 +130,10 @@ namespace Script {
           else if(message.content.message.includes("Player")){
             turn= message.content.message
           }
+          else if(message.content.message.includes("count")){
+            let num = message.content.message.match(/\d+/)[0];
+            Player2count += num
+          }
           else{
           //cubes = Base.getChildrenByName("Cubes")[0]
           cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
@@ -148,6 +152,10 @@ namespace Script {
           else if(message.content.message.includes("Player")){
             turn= message.content.message
           }
+          else if(message.content.message.includes("count")){
+            let num = message.content.message.match(/\d+/)[0];
+            Player1count += num
+          }
           else{
           //cubes = Base.getChildrenByName("Cubes")[0]
           cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER1)
@@ -155,13 +163,5 @@ namespace Script {
         }
         break
     }
-
-
-    
-    //console.table(_event);
-    //console.table("_event");
-
-    //console.log(Function)
   }
-
 }

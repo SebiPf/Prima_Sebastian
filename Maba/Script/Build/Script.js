@@ -176,6 +176,10 @@ var Script;
                     else if (message.content.message.includes("Player")) {
                         Script.turn = message.content.message;
                     }
+                    else if (message.content.message.includes("count")) {
+                        let num = message.content.message.match(/\d+/)[0];
+                        Script.Player2count += num;
+                    }
                     else {
                         //cubes = Base.getChildrenByName("Cubes")[0]
                         Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
@@ -191,6 +195,10 @@ var Script;
                     else if (message.content.message.includes("Player")) {
                         Script.turn = message.content.message;
                     }
+                    else if (message.content.message.includes("count")) {
+                        let num = message.content.message.match(/\d+/)[0];
+                        Script.Player1count += num;
+                    }
                     else {
                         //cubes = Base.getChildrenByName("Cubes")[0]
                         Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
@@ -198,9 +206,6 @@ var Script;
                 }
                 break;
         }
-        //console.table(_event);
-        //console.table("_event");
-        //console.log(Function)
     }
 })(Script || (Script = {}));
 var Script;
@@ -359,6 +364,8 @@ var Script;
                                             Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                             console.log("test");
                                             Base.getComponent(ƒ.ComponentAudio).play(true);
+                                            message = "count" + 1;
+                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                         }
                                     }
                                     else {
@@ -462,10 +469,17 @@ var Script;
                                     if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                                         //console.log("test player 1 field")
                                         if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
-                                            Script.cube.getComponent(StateMachine).transit(JOB.PLAYER1);
                                             point = true;
+                                            Script.Player1count += 1;
+                                            let jnum = j.toString();
+                                            let message = jnum;
+                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                            //cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+                                            //point = true
+                                            message = "count" + 1;
+                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                             Base.getComponent(ƒ.ComponentAudio).play(true);
-                                            Script.Player2count += 1;
+                                            //Player2count += 1
                                         }
                                     }
                                     else {

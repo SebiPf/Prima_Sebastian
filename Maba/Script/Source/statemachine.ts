@@ -201,6 +201,8 @@ namespace Script {
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                   console.log("test")
                   Base.getComponent(ƒ.ComponentAudio).play(true)
+                  message = "count" + 1
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 }
               }
               else {
@@ -309,10 +311,20 @@ namespace Script {
                 //console.log("test player 1 field")
                 
                 if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
-                  cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+
                   point = true
+                  Player1count += 1
+                  let jnum = j.toString();
+                  let message = jnum
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+
+
+                  //cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+                  //point = true
+                  message = "count" + 1
+                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                   Base.getComponent(ƒ.ComponentAudio).play(true)
-                  Player2count += 1
+                  //Player2count += 1
                 }
               }
               else {

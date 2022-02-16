@@ -25,7 +25,7 @@ namespace Script {
       lines = Base.getChildrenByName("Lines")[0]
       line = lines.getChildrenByName("Line")[i]
       if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-        line.getComponent(StateMachine).transit(JOB.PLAYER1)
+        //line.getComponent(StateMachine).transit(JOB.PLAYER1)
 
         let inum = i.toString();
         let message = inum
@@ -38,7 +38,12 @@ namespace Script {
         //turn= "PLAYER2"
       }
       else if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
-        line.getComponent(StateMachine).transit(JOB.PLAYER2)
+        //line.getComponent(StateMachine).transit(JOB.PLAYER2)
+        let inum = i.toString();
+        let message = inum
+        message = "linenum" + inum
+        console.log(message)
+        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
         check = true
         //turn= "PLAYER1"
       }
@@ -330,13 +335,13 @@ namespace Script {
                 check = false
                 turn = "Player2"
                 let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
               }
               else if (turn == "Player2") {
                 check = false
                 turn = "Player1"
                 let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
               }
               else { }
             }

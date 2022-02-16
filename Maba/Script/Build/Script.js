@@ -232,7 +232,7 @@ var Script;
             lines = Base.getChildrenByName("Lines")[0];
             Script.line = lines.getChildrenByName("Line")[i];
             if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-                Script.line.getComponent(StateMachine).transit(JOB.PLAYER1);
+                //line.getComponent(StateMachine).transit(JOB.PLAYER1)
                 let inum = i.toString();
                 let message = inum;
                 message = "linenum" + inum;
@@ -243,7 +243,12 @@ var Script;
                 //turn= "PLAYER2"
             }
             else if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
-                Script.line.getComponent(StateMachine).transit(JOB.PLAYER2);
+                //line.getComponent(StateMachine).transit(JOB.PLAYER2)
+                let inum = i.toString();
+                let message = inum;
+                message = "linenum" + inum;
+                console.log(message);
+                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 check = true;
                 //turn= "PLAYER1"
             }

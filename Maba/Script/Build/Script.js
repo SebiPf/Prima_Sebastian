@@ -154,7 +154,7 @@ var Script;
             let status = document.getElementById("status");
             status.hidden = true;
         }
-        //console.log(Player)
+        console.log(Script.turn);
         //console.log(Player1count)
         viewport.draw();
         ƒ.AudioManager.default.update();
@@ -183,7 +183,7 @@ var Script;
                     else if (message.content.message.includes("cubenum")) {
                         //cubes = Base.getChildrenByName("Cubes")[0]
                         let num = message.content.message.match(/\d+/)[0];
-                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     }
                 }
                 break;
@@ -193,7 +193,7 @@ var Script;
                         let num = message.content.message.match(/\d+/)[0];
                         lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     }
-                    else if (message.content.message.includes("Player")) {
+                    else if (message.content.message.includes("PLAYER")) {
                         Script.turn = message.content.message;
                     }
                     else if (message.content.message.includes("count")) {
@@ -203,7 +203,7 @@ var Script;
                     else if (message.content.message.includes("cubenum")) {
                         //cubes = Base.getChildrenByName("Cubes")[0]
                         let num = message.content.message.match(/\d+/)[0];
-                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     }
                 }
                 break;

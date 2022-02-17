@@ -134,8 +134,9 @@ namespace Script {
           else if (message.content.message.includes("cubenum")){
           //cubes = Base.getChildrenByName("Cubes")[0]
           let num = message.content.message.match(/\d+/)[0];
-          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
         }
+        
         }
         break
       case "Player2":
@@ -147,7 +148,7 @@ namespace Script {
     
             lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
           }
-          else if(message.content.message.includes("Player")){
+          else if(message.content.message.includes("PLAYER")){
             turn= message.content.message
           }
           else if(message.content.message.includes("count")){
@@ -157,8 +158,9 @@ namespace Script {
           else if (message.content.message.includes("cubenum")){
           //cubes = Base.getChildrenByName("Cubes")[0]
           let num = message.content.message.match(/\d+/)[0];
-          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
         }
+        
         }
         break
     }

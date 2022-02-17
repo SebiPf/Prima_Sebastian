@@ -22,7 +22,7 @@ namespace Script {
   ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
   export let client: ƒClient = new ƒClient();
   window.addEventListener("load", test);
-  
+
 
   //wss://fudge-server.herokuapp.com
   export async function test(_event: Event): Promise<void> {
@@ -82,12 +82,12 @@ namespace Script {
     viewport.addEventListener(ƒ.EVENT_POINTER.MOVE, hndPointerMove);
     GameState.get().player1 = Player1count;
     GameState.get().player2 = Player2count;
-    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A])){
+    if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.A])) {
       Player = "Player1"
       let status = document.getElementById("status");
       status.hidden = true
     }
-    else if(ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])){
+    else if (ƒ.Keyboard.isPressedOne([ƒ.KEYBOARD_CODE.D])) {
       Player = "Player2"
       let status = document.getElementById("status");
       status.hidden = true
@@ -104,39 +104,39 @@ namespace Script {
 
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-    
-        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-          console.log("Player received message")
-          if(message.content.message.includes("linenumplayera")){
-            let num = message.content.message.match(/\d+/)[0];
-            console.log("num: " + num)
-            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
-          }
-          else if(message.content.message.includes("linenumplayerb")){
-            let num = message.content.message.match(/\d+/)[0];
-            console.log("num: " + num)
-            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
-          }
-          else if(message.content.message.includes("PLAYER")){
-            turn= message.content.message
-          }
-          else if(message.content.message.includes("count")){
-            let num = message.content.message.match(/\d+/)[0];
-            Player1count = num
-          }
-          else if (message.content.message.includes("cubenumPlayera")){
-          let num = message.content.message.match(/\d+/)[0];
-          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
-          Player1count += 1
-          }
-          else if (message.content.message.includes("cubenumPlayerb")){
-            let num = message.content.message.match(/\d+/)[0];
-            cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
-            Player2count += 1
-          }
-        }
-        else{
 
-        }
+    if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+      console.log("Player received message " + message.content.message)
+      if (message.content.message.includes("linenumplayera")) {
+        let num = message.content.message.match(/\d+/)[0];
+        console.log("num: " + num)
+        lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+      }
+      else if (message.content.message.includes("linenumplayerb")) {
+        let num = message.content.message.match(/\d+/)[0];
+        console.log("num: " + num)
+        lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+      }
+      else if (message.content.message.includes("PLAYER")) {
+        turn = message.content.message
+      }
+      else if (message.content.message.includes("count")) {
+        let num = message.content.message.match(/\d+/)[0];
+        Player1count = num
+      }
+      else if (message.content.message.includes("cubenumPlayera")) {
+        let num = message.content.message.match(/\d+/)[0];
+        cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+        Player1count += 1
+      }
+      else if (message.content.message.includes("cubenumPlayerb")) {
+        let num = message.content.message.match(/\d+/)[0];
+        cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+        Player2count += 1
+      }
+    }
+    else {
+
+    }
   }
 }

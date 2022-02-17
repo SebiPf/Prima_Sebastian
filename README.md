@@ -1,0 +1,28 @@
+# Prima_Sebastian
+
+This is a game prototype what means it is not optimized.
+
+Begin by clicking anywere on the screen
+After that select which player you want to be by pressing a or d. (holding the button for like 1-2 sec should be enought)
+
+Now for the Game. This is a 2 player game and the gole is to get as many points as you can. You get points if you are the last player to put a line around a Square.
+If you score a Point you get an additional turn.
+| Nr | Criterion       | Explanation  
+|---:|-------------------|---------------------------------------------------------------------------------------------------------------------|
+|  0 | Units and Positions | May 0 in in the middle of the map. This makes creaking symetric maps easier                                    |
+|  1 | Hierarchy         | My first node is only used for sound since its a 2d game and that way the sound comes from the middle of the screen. All other elements a seperated into to groups lines and cubes what makes it easy to get all em´lements by calling all childrends of fpr example lines.                                                 |
+|  2 | Editor            | To build small prototypes the editor is easier because you can see what you added to a node.If it get bigger code is better since you can build complex strucktures more easyliy.(My struckture would have been easyier to buld by code than by hand)                                    |
+|  3 | Scriptcomponents  | maybe add sound to scfript component                                |
+|  4 | Extend            | very usefull for the statemachine??????                      |
+|  5 | Sound             | Sound is centered since its a 2d game background sound add to the feeling of the game.                    |
+|  6 | VUI               | score and mutables??????             |
+|  7 | Event-System      | maynly used for clickevents to get the click to the right node change |
+|  8 | External Data     | Maybe save current state????   |
+|  9 | Light             | 1 Light source since static 2D game.                                                                       |
+|  A | Physics           | No Physics               |
+|  B | Net               | 2 Player Online Game funktionality                                                                       |
+|  C | State Machines    | State Machine that changes the state of Components          |
+|  D | Animation         | No Animations       
+
+
+

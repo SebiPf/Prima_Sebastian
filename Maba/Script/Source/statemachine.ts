@@ -8,7 +8,7 @@ namespace Script {
   export let turn: String = "Player1"
   let Base: ƒ.Node
   let linestate: StateMachine
-  export let check = false;
+  
   
   export let col: boolean
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
@@ -30,13 +30,6 @@ namespace Script {
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
             lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER1)
             Checkpoint()
-            if(check == true){
-            }
-            else{
-              message = "Player2"
-              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-            }
-            check = false
 
             
           }
@@ -53,13 +46,7 @@ namespace Script {
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
             lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER2)
             Checkpoint()
-            if(check == true){
-            }
-            else{
-              message = "Player1"
-              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-            }
-            check = false
+            
           }
         }
     }
@@ -148,10 +135,6 @@ namespace Script {
               line.getComponent(StateMachine).transit(JOB.IDLE)
             }
           }
-
-            
-
-            
             check = false
           
           this.act();

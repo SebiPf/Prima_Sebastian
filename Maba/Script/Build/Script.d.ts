@@ -29,17 +29,17 @@ declare namespace Script {
     let Player1count: number;
     let Player2count: number;
     let Player: string;
+    let check: boolean;
     import ƒClient = FudgeNet.FudgeClient;
     let client: ƒClient;
     function test(_event: Event): Promise<void>;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
-    function Checkpoint(): Promise<boolean>;
+    function Checkpoint(): Promise<void>;
 }
 declare namespace Script {
     import ƒAid = FudgeAid;
     let turn: String;
-    let check: boolean;
     let col: boolean;
     enum JOB {
         IDLE = 0,

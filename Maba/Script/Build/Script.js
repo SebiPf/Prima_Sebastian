@@ -207,6 +207,9 @@ var Script;
     }
     async function Checkpoint() {
         console.log("ich werde aufgerufen");
+        let message;
+        let checkPlayer1 = false;
+        let checkPlayer2 = false;
         for (j = 0; j < 64; j++) {
             let x = 0;
             let y = 0;
@@ -257,10 +260,11 @@ var Script;
                     let jnum = j.toString();
                     let message = "cubenumplayera" + jnum;
                     Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                    Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     Base.getComponent(ƒ.ComponentAudio).play(true);
                     console.log("i did something");
-                    Script.check = true;
-                    return Script.check;
+                    //check = true
+                    checkPlayer1 = true;
                 }
                 else if (Script.cube.getComponent(Script.StateMachine).stateCurrent == Script.JOB.IDLE && Script.turn == "Player2") {
                     //Player2count += 1
@@ -268,21 +272,32 @@ var Script;
                     let message = "cubenumplayerb" + jnum;
                     //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
                     Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                    Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     Base.getComponent(ƒ.ComponentAudio).play(true);
                     //message = "count" + Player2count
                     //client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     console.log("i did something");
-                    Script.check = true;
-                    return Script.check;
+                    //check = true
+                    checkPlayer2 = true;
                 }
-                Script.check = false;
-                return Script.check;
             }
             else {
-                Script.check = false;
-                return Script.check;
+                console.log("i change the turn");
+                if (Script.turn == "Player1") {
+                    message = "Player2";
+                }
+                else if (Script.turn == "Player2") {
+                    message = "Player1";
+                }
             }
         }
+        if (checkPlayer1 == true) {
+            message = "Player1";
+        }
+        else if (checkPlayer2 == true) {
+            message = "Player2";
+        }
+        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
     }
     Script.Checkpoint = Checkpoint;
 })(Script || (Script = {}));
@@ -297,7 +312,6 @@ var Script;
     Script.turn = "Player1";
     let Base;
     let linestate;
-    Script.check = false;
     ƒ.Project.registerScriptNamespace(Script); // Register the namespace to FUDGE for serialization
     let JOB;
     (function (JOB) {
@@ -321,13 +335,6 @@ var Script;
                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                         lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER1);
                         Script.Checkpoint();
-                        if (Script.check == true) {
-                        }
-                        else {
-                            message = "Player2";
-                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                        }
-                        Script.check = false;
                     }
                 }
             case "Player2":
@@ -342,13 +349,6 @@ var Script;
                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                         lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER2);
                         Script.Checkpoint();
-                        if (Script.check == true) {
-                        }
-                        else {
-                            message = "Player1";
-                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                        }
-                        Script.check = false;
                     }
                 }
         }

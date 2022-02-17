@@ -24,6 +24,7 @@ namespace Script {
   let j: number = 0
   let Base: ƒ.Node
   let lines: ƒ.Node
+  export let check: boolean;
   import ƒClient = FudgeNet.FudgeClient;
   ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
   export let client: ƒClient = new ƒClient();
@@ -150,6 +151,9 @@ namespace Script {
   }
   export async function Checkpoint() {
     console.log("ich werde aufgerufen")
+    let message: String
+    let checkPlayer1: boolean = false
+    let checkPlayer2: boolean = false
     for (j = 0; j < 64; j++) {
       let x = 0
       let y = 0
@@ -202,10 +206,12 @@ namespace Script {
           let jnum = j.toString();
           let message = "cubenumplayera" + jnum
           client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER1)
           Base.getComponent(ƒ.ComponentAudio).play(true)
           console.log("i did something");
-          check = true
-          return check
+          //check = true
+          checkPlayer1 = true
+
         }
         else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
           //Player2count += 1
@@ -213,20 +219,37 @@ namespace Script {
           let message = "cubenumplayerb" + jnum
           //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
           client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
           Base.getComponent(ƒ.ComponentAudio).play(true)
           //message = "count" + Player2count
           //client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           console.log("i did something");
-          check = true
-          return check
+          //check = true
+          checkPlayer2 = true
+
         }
-        check = false
-        return check
-      } else {
-        check = false
-        return check
+
+      }
+      else {
+        console.log("i change the turn");
+        if (turn == "Player1") {
+          message = "Player2"
+        }
+        else if (turn == "Player2") {
+          message = "Player1"
+        }
+
+
       }
 
     }
+    if(checkPlayer1 == true) {
+      message = "Player1"
+    }
+    else if(checkPlayer2 == true){
+      message = "Player2"
+    }
+    client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+
   }
 }

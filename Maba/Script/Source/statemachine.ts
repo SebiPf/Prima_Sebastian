@@ -198,36 +198,7 @@ namespace Script {
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 }
               }
-              else {
-                if (turn == "Player1" && check == true) {
-                  turn = "Player2"
-                  let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                  check = false
-                }
-                if (turn == "Player2" && check == true) {
-                  turn = "Player1"
-                  let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                  check = false
-                }
-              }
-            }
-            if (point == true) {
-              if (turn == "Player1") {
-                check = false
-                turn = "Player2"
-                let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-              }
-              else if (turn == "Player2") {
-    
-                check = false
-                turn = "Player1"
-                let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-              }
-              else { }
+
             }
             check = false
           
@@ -319,36 +290,8 @@ namespace Script {
                   //Player2count += 1
                 }
               }
-              else {
-                if (turn == "Player1" && check == true) {
-                  turn = "Player2"
-                  let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                  check = false
-                }
-                if (turn == "Player2" && check == true) {
-                  turn = "Player1"
-                  let message = turn
-                  client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                  check = false
-                }
-              }
             }
-            if (point == true) {
-              if (turn == "Player1") {
-                check = false
-                turn = "Player2"
-                let message = turn
-                client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-              }
-              else if (turn == "Player2") {
-                check = false
-                turn = "Player1"
-                let message = turn
-                client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-              }
-              else { }
-            }
+              
             check = false
           
         

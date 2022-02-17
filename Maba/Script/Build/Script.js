@@ -164,12 +164,16 @@ var Script;
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
         let message = JSON.parse(_event.data);
+        Base = graph.getChildrenByName("Base")[0];
+        lines = Base.getChildrenByName("Lines")[0];
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
             console.log("Player received message " + message.content.message);
             if (message.content.message.includes("linenumplayera")) {
                 let num = message.content.message.match(/\d+/)[0];
                 console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                //Player = "Player2"
+                //Player = "Player1"
             }
             else if (message.content.message.includes("linenumplayerb")) {
                 let num = message.content.message.match(/\d+/)[0];

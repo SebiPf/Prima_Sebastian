@@ -34,18 +34,18 @@ namespace Script {
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           }
         }
-        case "Player2":
-          for (let i = 0; i < 144; i++) {
-            Base = graph.getChildrenByName("Base")[0]
-            lines = Base.getChildrenByName("Lines")[0]
-            line = lines.getChildrenByName("Line")[i]
-            if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
-              let inum = i.toString();
-              let message = inum
-              message = "linenumplayerb" + inum
-              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-            }
+      case "Player2":
+        for (let i = 0; i < 144; i++) {
+          Base = graph.getChildrenByName("Base")[0]
+          lines = Base.getChildrenByName("Lines")[0]
+          line = lines.getChildrenByName("Line")[i]
+          if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
+            let inum = i.toString();
+            let message = inum
+            message = "linenumplayerb" + inum
+            client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           }
+        }
     }
   }
   export class StateMachine extends ƒAid.ComponentStateMachine<JOB> {

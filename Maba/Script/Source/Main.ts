@@ -104,8 +104,9 @@ namespace Script {
 
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-    console.log("Player received message")
+    
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+          console.log("Player received message")
           if(message.content.message.includes("linenumplayera")){
             let num = message.content.message.match(/\d+/)[0];
             lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
@@ -125,13 +126,15 @@ namespace Script {
           let num = message.content.message.match(/\d+/)[0];
           cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
           Player1count += 1
+          }
+          else if (message.content.message.includes("cubenumPlayerb")){
+            let num = message.content.message.match(/\d+/)[0];
+            cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+            Player2count += 1
+          }
         }
-        else if (message.content.message.includes("cubenumPlayerb")){
-          let num = message.content.message.match(/\d+/)[0];
-          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
-          Player2count += 1
-        }
+        else{
 
-    }
+        }
   }
 }

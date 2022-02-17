@@ -164,8 +164,8 @@ var Script;
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
         let message = JSON.parse(_event.data);
-        console.log("Player received message");
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+            console.log("Player received message");
             if (message.content.message.includes("linenumplayera")) {
                 let num = message.content.message.match(/\d+/)[0];
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
@@ -191,6 +191,8 @@ var Script;
                 Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                 Script.Player2count += 1;
             }
+        }
+        else {
         }
     }
 })(Script || (Script = {}));

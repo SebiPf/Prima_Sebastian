@@ -171,18 +171,19 @@ var Script;
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
                     if (message.content.message.includes("linenum")) {
                         let num = message.content.message.match(/\d+/)[0];
-                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     }
-                    else if (message.content.message.includes("Player")) {
+                    else if (message.content.message.includes("PLAYER")) {
                         Script.turn = message.content.message;
                     }
                     else if (message.content.message.includes("count")) {
                         let num = message.content.message.match(/\d+/)[0];
-                        Script.Player2count += num;
+                        Script.Player1count = num;
                     }
-                    else {
+                    else if (message.content.message.includes("cubenum")) {
                         //cubes = Base.getChildrenByName("Cubes")[0]
-                        Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                        let num = message.content.message.match(/\d+/)[0];
+                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     }
                 }
                 break;
@@ -190,18 +191,19 @@ var Script;
                 if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
                     if (message.content.message.includes("linenum")) {
                         let num = message.content.message.match(/\d+/)[0];
-                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     }
                     else if (message.content.message.includes("Player")) {
                         Script.turn = message.content.message;
                     }
                     else if (message.content.message.includes("count")) {
                         let num = message.content.message.match(/\d+/)[0];
-                        Script.Player1count += num;
+                        Script.Player2count = num;
                     }
-                    else {
+                    else if (message.content.message.includes("cubenum")) {
                         //cubes = Base.getChildrenByName("Cubes")[0]
-                        Script.cubes.getChildrenByName('Cube')[message.content.message].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                        let num = message.content.message.match(/\d+/)[0];
+                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     }
                 }
                 break;
@@ -239,34 +241,30 @@ var Script;
             lines = Base.getChildrenByName("Lines")[0];
             Script.line = lines.getChildrenByName("Line")[i];
             if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-                //line.getComponent(StateMachine).transit(JOB.PLAYER1)
                 let inum = i.toString();
                 let message = inum;
                 message = "linenum" + inum;
-                console.log(message);
-                //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
+                //console.log(message)
                 Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 check = true;
-                //turn= "PLAYER2"
             }
             else if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
                 //line.getComponent(StateMachine).transit(JOB.PLAYER2)
                 let inum = i.toString();
                 let message = inum;
                 message = "linenum" + inum;
-                console.log(message);
+                //console.log(message)
                 Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 check = true;
-                //turn= "PLAYER1"
             }
-            if (Script.turn == "PLAYER1") {
-                Script.turn = "PLAYER2";
-                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
-            }
-            else if (Script.turn == "PLAYER2") {
-                Script.turn = "PLAYER1";
-                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
-            }
+        }
+        if (Script.turn == "PLAYER1") {
+            Script.turn = "PLAYER2";
+            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
+        }
+        else if (Script.turn == "PLAYER2") {
+            Script.turn = "PLAYER1";
+            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
         }
     }
     Script.change = change;
@@ -291,6 +289,7 @@ var Script;
                 graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
                 let i = 0;
                 let j = 0;
+                let point = false;
                 //console.log(Player)
                 if (Script.turn == Script.Player) {
                     switch (Script.Player) {
@@ -308,99 +307,96 @@ var Script;
                                     Script.line.getComponent(StateMachine).transit(JOB.IDLE);
                                 }
                             }
-                            if (check == true) {
-                                let point = false;
-                                for (j = 0; j < 64; j++) {
-                                    let x = 0;
-                                    let y = 0;
-                                    if (j < 8) {
-                                        x = 72;
-                                        y = 73;
-                                    }
-                                    else if (j < 16 && j > 7) {
-                                        x = 73;
-                                        y = 74;
-                                    }
-                                    else if (j < 24 && j > 15) {
-                                        x = 74;
-                                        y = 75;
-                                    }
-                                    else if (j < 32 && j > 23) {
-                                        x = 75;
-                                        y = 76;
-                                    }
-                                    else if (j < 40 && j > 31) {
-                                        x = 76;
-                                        y = 77;
-                                    }
-                                    else if (j < 48 && j > 39) {
-                                        x = 77;
-                                        y = 78;
-                                    }
-                                    else if (j < 56 && j > 47) {
-                                        x = 78;
-                                        y = 79;
-                                    }
-                                    else if (j < 64 && j > 55) {
-                                        x = 79;
-                                        y = 80;
-                                    }
-                                    Base = graph.getChildrenByName("Base")[0];
-                                    cubes = Base.getChildrenByName("Cubes")[0];
-                                    lines = Base.getChildrenByName("Lines")[0];
-                                    Script.cube = cubes.getChildrenByName("Cube")[j];
-                                    Script.line = lines.getChildrenByName("Line")[j];
-                                    //console.log(cube);
-                                    linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
-                                    linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
-                                    linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
-                                    linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
-                                    if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-                                        console.log("test");
-                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
-                                            point = true;
-                                            Script.Player1count += 1;
-                                            let jnum = j.toString();
-                                            let message = jnum;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            console.log("test");
-                                            Base.getComponent(ƒ.ComponentAudio).play(true);
-                                            message = "count" + 1;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                        }
-                                    }
-                                    else {
-                                        if (Script.turn == "Player1" && check == true) {
-                                            Script.turn = "Player2";
-                                            let message = Script.turn;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            check = false;
-                                        }
-                                        if (Script.turn == "Player2" && check == true) {
-                                            Script.turn = "Player1";
-                                            let message = Script.turn;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            check = false;
-                                        }
+                            point = false;
+                            for (j = 0; j < 64; j++) {
+                                let x = 0;
+                                let y = 0;
+                                if (j < 8) {
+                                    x = 72;
+                                    y = 73;
+                                }
+                                else if (j < 16 && j > 7) {
+                                    x = 73;
+                                    y = 74;
+                                }
+                                else if (j < 24 && j > 15) {
+                                    x = 74;
+                                    y = 75;
+                                }
+                                else if (j < 32 && j > 23) {
+                                    x = 75;
+                                    y = 76;
+                                }
+                                else if (j < 40 && j > 31) {
+                                    x = 76;
+                                    y = 77;
+                                }
+                                else if (j < 48 && j > 39) {
+                                    x = 77;
+                                    y = 78;
+                                }
+                                else if (j < 56 && j > 47) {
+                                    x = 78;
+                                    y = 79;
+                                }
+                                else if (j < 64 && j > 55) {
+                                    x = 79;
+                                    y = 80;
+                                }
+                                Base = graph.getChildrenByName("Base")[0];
+                                cubes = Base.getChildrenByName("Cubes")[0];
+                                lines = Base.getChildrenByName("Lines")[0];
+                                Script.cube = cubes.getChildrenByName("Cube")[j];
+                                Script.line = lines.getChildrenByName("Line")[j];
+                                //console.log(cube);
+                                linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+                                linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+                                linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+                                linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+                                if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
+                                    if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player1") {
+                                        point = true;
+                                        Script.Player1count += 1;
+                                        let jnum = j.toString();
+                                        let message = "cubenum" + jnum;
+                                        //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
+                                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                        Base.getComponent(ƒ.ComponentAudio).play(true);
+                                        message = "count" + Script.Player2count;
+                                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                                     }
                                 }
-                                if (point == true) {
-                                    if (Script.turn == "Player1") {
-                                        check = false;
+                                else {
+                                    if (Script.turn == "Player1" && check == true) {
                                         Script.turn = "Player2";
                                         let message = Script.turn;
                                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                    }
-                                    else if (Script.turn == "Player2") {
                                         check = false;
+                                    }
+                                    if (Script.turn == "Player2" && check == true) {
                                         Script.turn = "Player1";
                                         let message = Script.turn;
                                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                        check = false;
                                     }
-                                    else { }
                                 }
-                                check = false;
                             }
+                            if (point == true) {
+                                if (Script.turn == "Player1") {
+                                    check = false;
+                                    Script.turn = "Player2";
+                                    let message = Script.turn;
+                                    Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                }
+                                else if (Script.turn == "Player2") {
+                                    check = false;
+                                    Script.turn = "Player1";
+                                    let message = Script.turn;
+                                    Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                }
+                                else { }
+                            }
+                            check = false;
                             this.act();
                             break;
                         case "Player2":
@@ -420,102 +416,101 @@ var Script;
                                 }
                                 //console.log(line.getComponent(StateMachine).stateCurrent)
                             }
-                            if (check == true) {
-                                let point = false;
-                                for (j = 0; j < 64; j++) {
-                                    let x = 0;
-                                    let y = 0;
-                                    if (j < 8) {
-                                        x = 72;
-                                        y = 73;
-                                    }
-                                    else if (j < 16 && j > 7) {
-                                        x = 73;
-                                        y = 74;
-                                    }
-                                    else if (j < 24 && j > 15) {
-                                        x = 74;
-                                        y = 75;
-                                    }
-                                    else if (j < 32 && j > 23) {
-                                        x = 75;
-                                        y = 76;
-                                    }
-                                    else if (j < 40 && j > 31) {
-                                        x = 76;
-                                        y = 77;
-                                    }
-                                    else if (j < 48 && j > 39) {
-                                        x = 77;
-                                        y = 78;
-                                    }
-                                    else if (j < 56 && j > 47) {
-                                        x = 78;
-                                        y = 79;
-                                    }
-                                    else if (j < 64 && j > 55) {
-                                        x = 79;
-                                        y = 80;
-                                    }
-                                    Base = graph.getChildrenByName("Base")[0];
-                                    cubes = Base.getChildrenByName("Cubes")[0];
-                                    lines = Base.getChildrenByName("Lines")[0];
-                                    Script.cube = cubes.getChildrenByName("Cube")[j];
-                                    Script.line = lines.getChildrenByName("Line")[j];
-                                    //console.log(cube);
-                                    linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
-                                    linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
-                                    linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
-                                    linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
-                                    if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-                                        //console.log("test player 1 field")
-                                        console.log("test");
-                                        if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player1") {
-                                            point = true;
-                                            Script.Player1count += 1;
-                                            let jnum = j.toString();
-                                            let message = jnum;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            //cube.getComponent(StateMachine).transit(JOB.PLAYER1)
-                                            //point = true
-                                            message = "count" + 1;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            Base.getComponent(ƒ.ComponentAudio).play(true);
-                                            //Player2count += 1
-                                        }
-                                    }
-                                    else {
-                                        if (Script.turn == "Player1" && check == true) {
-                                            Script.turn = "Player2";
-                                            let message = Script.turn;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            check = false;
-                                        }
-                                        if (Script.turn == "Player2" && check == true) {
-                                            Script.turn = "Player1";
-                                            let message = Script.turn;
-                                            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                            check = false;
-                                        }
+                            point = false;
+                            for (j = 0; j < 64; j++) {
+                                let x = 0;
+                                let y = 0;
+                                if (j < 8) {
+                                    x = 72;
+                                    y = 73;
+                                }
+                                else if (j < 16 && j > 7) {
+                                    x = 73;
+                                    y = 74;
+                                }
+                                else if (j < 24 && j > 15) {
+                                    x = 74;
+                                    y = 75;
+                                }
+                                else if (j < 32 && j > 23) {
+                                    x = 75;
+                                    y = 76;
+                                }
+                                else if (j < 40 && j > 31) {
+                                    x = 76;
+                                    y = 77;
+                                }
+                                else if (j < 48 && j > 39) {
+                                    x = 77;
+                                    y = 78;
+                                }
+                                else if (j < 56 && j > 47) {
+                                    x = 78;
+                                    y = 79;
+                                }
+                                else if (j < 64 && j > 55) {
+                                    x = 79;
+                                    y = 80;
+                                }
+                                Base = graph.getChildrenByName("Base")[0];
+                                cubes = Base.getChildrenByName("Cubes")[0];
+                                lines = Base.getChildrenByName("Lines")[0];
+                                Script.cube = cubes.getChildrenByName("Cube")[j];
+                                Script.line = lines.getChildrenByName("Line")[j];
+                                //console.log(cube);
+                                linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+                                linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+                                linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+                                linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+                                if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
+                                    //console.log("test player 1 field")
+                                    //console.log("test")
+                                    if (Script.cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && Script.turn == "Player2") {
+                                        point = true;
+                                        Script.Player1count += 1;
+                                        let jnum = j.toString();
+                                        let message = "cubenum" + jnum;
+                                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                        //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER1)
+                                        //cube.getComponent(StateMachine).transit(JOB.PLAYER1)
+                                        //point = true
+                                        message = "count" + Script.Player1count;
+                                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                        Base.getComponent(ƒ.ComponentAudio).play(true);
+                                        //Player2count += 1
                                     }
                                 }
-                                if (point == true) {
-                                    if (Script.turn == "Player1") {
-                                        check = false;
+                                else {
+                                    if (Script.turn == "Player1" && check == true) {
                                         Script.turn = "Player2";
                                         let message = Script.turn;
                                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                                    }
-                                    else if (Script.turn == "Player2") {
                                         check = false;
+                                    }
+                                    if (Script.turn == "Player2" && check == true) {
                                         Script.turn = "Player1";
                                         let message = Script.turn;
                                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                        check = false;
                                     }
-                                    else { }
                                 }
-                                check = false;
                             }
+                            if (point == true) {
+                                if (Script.turn == "Player1") {
+                                    check = false;
+                                    Script.turn = "Player2";
+                                    let message = Script.turn;
+                                    Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                }
+                                else if (Script.turn == "Player2") {
+                                    check = false;
+                                    Script.turn = "Player1";
+                                    let message = Script.turn;
+                                    Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                                }
+                                else { }
+                            }
+                            check = false;
                             this.act();
                             break;
                     }

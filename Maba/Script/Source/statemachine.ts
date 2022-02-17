@@ -25,37 +25,30 @@ namespace Script {
       lines = Base.getChildrenByName("Lines")[0]
       line = lines.getChildrenByName("Line")[i]
       if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-        //line.getComponent(StateMachine).transit(JOB.PLAYER1)
-
         let inum = i.toString();
         let message = inum
         message = "linenum" + inum
-        console.log(message)
-        //cubes.getChildrenByName('Cube')[jnum].getComponent(StateMachine).transit(JOB.PLAYER2)
+        //console.log(message)
         client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-
         check = true
-        //turn= "PLAYER2"
       }
       else if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
         //line.getComponent(StateMachine).transit(JOB.PLAYER2)
         let inum = i.toString();
         let message = inum
         message = "linenum" + inum
-        console.log(message)
+        //console.log(message)
         client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
         check = true
-        //turn= "PLAYER1"
       }
-      if (turn == "PLAYER1") {        
-        turn = "PLAYER2"
-        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
-      }
-      else if (turn == "PLAYER2") {
-        turn = "PLAYER1"
-        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
-      }
-
+    }
+    if (turn == "PLAYER1") {        
+      turn = "PLAYER2"
+      client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
+    }
+    else if (turn == "PLAYER2") {
+      turn = "PLAYER1"
+      client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
     }
   }
   export class StateMachine extends ƒAid.ComponentStateMachine<JOB> {
@@ -120,11 +113,11 @@ namespace Script {
       }
     }
 
-
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
       let j: number = 0
+      let point: boolean = false
       //console.log(Player)
       if (turn == Player){
       switch (Player){
@@ -143,8 +136,8 @@ namespace Script {
             }
           }
           
-          if (check == true) {
-            let point: boolean = false
+          
+            point = false
             for (j = 0; j < 64; j++) {
               let x = 0
               let y = 0
@@ -193,16 +186,15 @@ namespace Script {
               linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
     
               if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-                console.log("test")
-                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
                   point = true
                   Player1count += 1
                   let jnum = j.toString();
-                  let message = jnum
+                  let message = "cubenum" + jnum
+                  //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                  console.log("test")
                   Base.getComponent(ƒ.ComponentAudio).play(true)
-                  message = "count" + 1
+                  message = "count" + Player2count
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                 }
               }
@@ -238,7 +230,7 @@ namespace Script {
               else { }
             }
             check = false
-          }
+          
           this.act();
           break;
         case "Player2":
@@ -259,8 +251,8 @@ namespace Script {
             }
             //console.log(line.getComponent(StateMachine).stateCurrent)
           }
-          if (check == true) {
-            let point: boolean = false
+          
+            point = false
             for (j = 0; j < 64; j++) {
               let x = 0
               let y = 0
@@ -310,19 +302,18 @@ namespace Script {
     
               if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
                 //console.log("test player 1 field")
-                console.log("test")
-                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
+                //console.log("test")
+                if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
 
                   point = true
                   Player1count += 1
                   let jnum = j.toString();
-                  let message = jnum
+                  let message = "cubenum" + jnum
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-
-
+                  //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER1)
                   //cube.getComponent(StateMachine).transit(JOB.PLAYER1)
                   //point = true
-                  message = "count" + 1
+                  message = "count" + Player1count
                   client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                   Base.getComponent(ƒ.ComponentAudio).play(true)
                   //Player2count += 1
@@ -359,7 +350,7 @@ namespace Script {
               else { }
             }
             check = false
-          }
+          
         
           this.act();
           break;
@@ -369,3 +360,4 @@ namespace Script {
   
   }
 }
+

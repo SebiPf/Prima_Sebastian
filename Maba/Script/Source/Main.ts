@@ -116,9 +116,29 @@ namespace Script {
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
     switch(Player){
-      
       case "Player1":
-
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+    
+          if(message.content.message.includes("linenum")){
+            let num = message.content.message.match(/\d+/)[0];
+    
+            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+          }
+          else if(message.content.message.includes("PLAYER")){
+            turn= message.content.message
+          }
+          else if(message.content.message.includes("count")){
+            let num = message.content.message.match(/\d+/)[0];
+            Player1count = num
+          }
+          else if (message.content.message.includes("cubenum")){
+          //cubes = Base.getChildrenByName("Cubes")[0]
+          let num = message.content.message.match(/\d+/)[0];
+          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
+        }
+        }
+        break
+      case "Player2":
         
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
     
@@ -132,33 +152,12 @@ namespace Script {
           }
           else if(message.content.message.includes("count")){
             let num = message.content.message.match(/\d+/)[0];
-            Player2count += num
+            Player2count = num
           }
-          else{
+          else if (message.content.message.includes("cubenum")){
           //cubes = Base.getChildrenByName("Cubes")[0]
-          cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER2)
-        }
-        }
-        break
-      case "Player2":
-        
-        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-    
-          if(message.content.message.includes("linenum")){
-            let num = message.content.message.match(/\d+/)[0];
-    
-            lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
-          }
-          else if(message.content.message.includes("Player")){
-            turn= message.content.message
-          }
-          else if(message.content.message.includes("count")){
-            let num = message.content.message.match(/\d+/)[0];
-            Player1count += num
-          }
-          else{
-          //cubes = Base.getChildrenByName("Cubes")[0]
-          cubes.getChildrenByName('Cube')[message.content.message].getComponent(StateMachine).transit(JOB.PLAYER1)
+          let num = message.content.message.match(/\d+/)[0];
+          cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
         }
         }
         break

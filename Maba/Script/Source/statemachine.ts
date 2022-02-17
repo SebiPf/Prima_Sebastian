@@ -20,35 +20,32 @@ namespace Script {
     IDLE, HOVERED1, HOVERED2, PLAYER1, PLAYER2
   }
   export async function change(_event: Event): Promise<void> {
-    for (let i = 0; i < 144; i++) {
-      Base = graph.getChildrenByName("Base")[0]
-      lines = Base.getChildrenByName("Lines")[0]
-      line = lines.getChildrenByName("Line")[i]
-      if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-        let inum = i.toString();
-        let message = inum
-        message = "linenum" + inum
-        //console.log(message)
-        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-        check = true
-      }
-      else if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
-        //line.getComponent(StateMachine).transit(JOB.PLAYER2)
-        let inum = i.toString();
-        let message = inum
-        message = "linenum" + inum
-        //console.log(message)
-        client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-        check = true
-      }
-    }
-    if (turn == "PLAYER1") {        
-      turn = "PLAYER2"
-      client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
-    }
-    else if (turn == "PLAYER2") {
-      turn = "PLAYER1"
-      client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn } });
+
+    switch (Player){
+      case "Player1":
+        for (let i = 0; i < 144; i++) {
+          Base = graph.getChildrenByName("Base")[0]
+          lines = Base.getChildrenByName("Lines")[0]
+          line = lines.getChildrenByName("Line")[i]
+          if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
+            let inum = i.toString();
+            let message = inum
+            message = "linenumplayera" + inum
+            client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          }
+        }
+        case "Player2":
+          for (let i = 0; i < 144; i++) {
+            Base = graph.getChildrenByName("Base")[0]
+            lines = Base.getChildrenByName("Lines")[0]
+            line = lines.getChildrenByName("Line")[i]
+            if (line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
+              let inum = i.toString();
+              let message = inum
+              message = "linenumplayerb" + inum
+              client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+            }
+          }
     }
   }
   export class StateMachine extends ƒAid.ComponentStateMachine<JOB> {

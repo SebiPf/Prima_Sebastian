@@ -80,26 +80,24 @@ var Script;
     let lines;
     var ƒClient = FudgeNet.FudgeClient;
     ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
-    // Create a FudgeClient for this browser tab
     Script.client = new ƒClient();
-    // keep a list of known clients, updated with information from the server
-    //let clientsKnown: { [id: string]: { name?: string; isHost?: boolean; } } = {};
-    //import * as Mongo from "mongodb";
     window.addEventListener("load", test);
     //wss://fudge-server.herokuapp.com
     async function test(_event) {
+        let status = document.getElementById("status");
+        status.hidden = true;
         window.addEventListener("click", start);
     }
     Script.test = test;
     async function start(_event) {
+        let status = document.getElementById("status");
+        status.hidden = false;
         let dia = document.getElementById("dia");
         dia.hidden = true;
         window.removeEventListener("click", start);
         let domServer = "wss://mabaprima.herokuapp.com/";
         try {
-            // connect to a server with the given url
             Script.client.connectToServer(domServer);
-            //(<HTMLInputElement>document.forms[0].querySelector("input#id")).value = client.id;
             Script.client.addEventListener(FudgeNet.EVENT.MESSAGE_RECEIVED, receiveMessage);
         }
         catch (_error) {
@@ -166,47 +164,32 @@ var Script;
     Script.hndPointerMove = hndPointerMove;
     async function receiveMessage(_event) {
         let message = JSON.parse(_event.data);
-        switch (Script.Player) {
-            case "Player1":
-                if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-                    if (message.content.message.includes("linenum")) {
-                        let num = message.content.message.match(/\d+/)[0];
-                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
-                    }
-                    else if (message.content.message.includes("PLAYER")) {
-                        Script.turn = message.content.message;
-                    }
-                    else if (message.content.message.includes("count")) {
-                        let num = message.content.message.match(/\d+/)[0];
-                        Script.Player1count = num;
-                    }
-                    else if (message.content.message.includes("cubenum")) {
-                        //cubes = Base.getChildrenByName("Cubes")[0]
-                        let num = message.content.message.match(/\d+/)[0];
-                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
-                    }
-                }
-                break;
-            case "Player2":
-                if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-                    if (message.content.message.includes("linenum")) {
-                        let num = message.content.message.match(/\d+/)[0];
-                        lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
-                    }
-                    else if (message.content.message.includes("PLAYER")) {
-                        Script.turn = message.content.message;
-                    }
-                    else if (message.content.message.includes("count")) {
-                        let num = message.content.message.match(/\d+/)[0];
-                        Script.Player2count = num;
-                    }
-                    else if (message.content.message.includes("cubenum")) {
-                        //cubes = Base.getChildrenByName("Cubes")[0]
-                        let num = message.content.message.match(/\d+/)[0];
-                        Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
-                    }
-                }
-                break;
+        if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
+            if (message.content.message.includes("linenumplayera")) {
+                let num = message.content.message.match(/\d+/)[0];
+                lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+            }
+            else if (message.content.message.includes("linenumPlayerb")) {
+                let num = message.content.message.match(/\d+/)[0];
+                lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+            }
+            else if (message.content.message.includes("PLAYER")) {
+                Script.turn = message.content.message;
+            }
+            else if (message.content.message.includes("count")) {
+                let num = message.content.message.match(/\d+/)[0];
+                Script.Player1count = num;
+            }
+            else if (message.content.message.includes("cubenumPlayera")) {
+                let num = message.content.message.match(/\d+/)[0];
+                Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
+                Script.Player1count += 1;
+            }
+            else if (message.content.message.includes("cubenumPlayerb")) {
+                let num = message.content.message.match(/\d+/)[0];
+                Script.cubes.getChildrenByName('Cube')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
+                Script.Player2count += 1;
+            }
         }
     }
 })(Script || (Script = {}));
@@ -236,35 +219,31 @@ var Script;
         JOB[JOB["PLAYER2"] = 4] = "PLAYER2";
     })(JOB = Script.JOB || (Script.JOB = {}));
     async function change(_event) {
-        for (let i = 0; i < 144; i++) {
-            Base = graph.getChildrenByName("Base")[0];
-            lines = Base.getChildrenByName("Lines")[0];
-            Script.line = lines.getChildrenByName("Line")[i];
-            if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
-                let inum = i.toString();
-                let message = inum;
-                message = "linenum" + inum;
-                //console.log(message)
-                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                check = true;
-            }
-            else if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
-                //line.getComponent(StateMachine).transit(JOB.PLAYER2)
-                let inum = i.toString();
-                let message = inum;
-                message = "linenum" + inum;
-                //console.log(message)
-                Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
-                check = true;
-            }
-        }
-        if (Script.turn == "PLAYER1") {
-            Script.turn = "PLAYER2";
-            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
-        }
-        else if (Script.turn == "PLAYER2") {
-            Script.turn = "PLAYER1";
-            Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { turn: Script.turn } });
+        switch (Script.Player) {
+            case "Player1":
+                for (let i = 0; i < 144; i++) {
+                    Base = graph.getChildrenByName("Base")[0];
+                    lines = Base.getChildrenByName("Lines")[0];
+                    Script.line = lines.getChildrenByName("Line")[i];
+                    if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED1) {
+                        let inum = i.toString();
+                        let message = inum;
+                        message = "linenumplayera" + inum;
+                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                    }
+                }
+            case "Player2":
+                for (let i = 0; i < 144; i++) {
+                    Base = graph.getChildrenByName("Base")[0];
+                    lines = Base.getChildrenByName("Lines")[0];
+                    Script.line = lines.getChildrenByName("Line")[i];
+                    if (Script.line.getComponent(StateMachine).stateCurrent == JOB.HOVERED2) {
+                        let inum = i.toString();
+                        let message = inum;
+                        message = "linenumplayerb" + inum;
+                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                    }
+                }
         }
     }
     Script.change = change;

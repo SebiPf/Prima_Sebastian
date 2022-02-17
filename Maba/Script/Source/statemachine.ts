@@ -1,22 +1,17 @@
 namespace Script {
   import ƒ = FudgeCore;
   import ƒAid = FudgeAid;
-  //import * as Mongo from "mongodb";
   let graph: ƒ.Graph;
   let lines: ƒ.Node
-  let cubes: ƒ.Node
   export let turn: String = "Player1"
   let Base: ƒ.Node
   let linestate: StateMachine
-  
-  
   export let col: boolean
   ƒ.Project.registerScriptNamespace(Script);  // Register the namespace to FUDGE for serialization
   export enum JOB {
     IDLE, HOVERED1, HOVERED2, PLAYER1, PLAYER2
   }
   export async function change(_event: Event): Promise<void> {
-
     switch (Player){
       case "Player1":
         for (let i = 0; i < 144; i++) {
@@ -29,9 +24,7 @@ namespace Script {
             message = "linenumplayera" + inum
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
             lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER1)
-            Checkpoint()
-
-            
+            Checkpoint()            
           }
         }
       case "Player2":
@@ -46,7 +39,6 @@ namespace Script {
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
             lines.getChildrenByName('Line')[i].getComponent(StateMachine).transit(JOB.PLAYER2)
             Checkpoint()
-            
           }
         }
     }
@@ -57,7 +49,6 @@ namespace Script {
     constructor() {
       super();
       this.instructions = StateMachine.instructions; // setup instructions with the static set
-
       // Don't start when running in editor
       if (ƒ.Project.mode == ƒ.MODE.EDITOR)
         return;
@@ -65,7 +56,6 @@ namespace Script {
       this.addEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
       this.addEventListener(ƒ.EVENT.COMPONENT_REMOVE, this.hndEvent);
       this.addEventListener(ƒ.EVENT.NODE_DESERIALIZED, this.hndEvent);
-
     }
     public static get(): ƒAid.StateMachineInstructions<JOB> {
       let setup: ƒAid.StateMachineInstructions<JOB> = new ƒAid.StateMachineInstructions();
@@ -76,7 +66,6 @@ namespace Script {
       setup.setAction(JOB.PLAYER2, <ƒ.General>this.actPlayer2);
       return setup;
     }
-
     private static async actIdle(_machine: StateMachine): Promise<void> {
       if (_machine.node.getParent().name == "Lines") {
         _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 0, 0, 255);
@@ -87,7 +76,6 @@ namespace Script {
     }
     private static async actHoverd1(_machine: StateMachine): Promise<void> {
       _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 255, 0, 255);
-      //console.log()
     }
     private static async actHoverd2(_machine: StateMachine): Promise<void> {
       _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 0, 0, 255);
@@ -112,13 +100,9 @@ namespace Script {
         case ƒ.EVENT.NODE_DESERIALIZED:
       }
     }
-
     private update = (_event: Event): void => {
       graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
       let i: number = 0
-      
-      let point: boolean = false
-      //console.log(Player)
       if (turn == Player){
       switch (Player){
         case "Player1":
@@ -136,7 +120,6 @@ namespace Script {
             }
           }
             check = false
-          
           this.act();
           break;
         case "Player2":
@@ -153,13 +136,9 @@ namespace Script {
             }
             else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
               line.getComponent(StateMachine).transit(JOB.IDLE)
-              //break
             }
-            //console.log(line.getComponent(StateMachine).stateCurrent)
           }
             check = false
-          
-        
           this.act();
           break;
       }

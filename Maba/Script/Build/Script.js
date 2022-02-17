@@ -57,16 +57,11 @@ var Script;
     }
     Script.GameState = GameState;
 })(Script || (Script = {}));
-//import { count } from "console";
 ///<reference path="../../../Net/Build/Client/FudgeClient.d.ts"/>
-//import * as Mongo from "mongodb";
 var Script;
-//import { count } from "console";
 ///<reference path="../../../Net/Build/Client/FudgeClient.d.ts"/>
-//import * as Mongo from "mongodb";
 (function (Script) {
     var ƒ = FudgeCore;
-    //import fs = FudgeServer;
     ƒ.Debug.info("Main Program Template running!");
     let camera = new ƒ.Node("Cam1");
     let graph;
@@ -87,7 +82,6 @@ var Script;
     ƒ.Debug.setFilter(ƒ.DebugConsole, ƒ.DEBUG_FILTER.ALL);
     Script.client = new ƒClient();
     window.addEventListener("load", test);
-    //wss://fudge-server.herokuapp.com
     async function test(_event) {
         let status = document.getElementById("status");
         status.hidden = true;
@@ -157,8 +151,6 @@ var Script;
             let status = document.getElementById("status");
             status.hidden = true;
         }
-        //console.log(turn)
-        //console.log(Player1count)
         viewport.draw();
         ƒ.AudioManager.default.update();
     }
@@ -249,7 +241,6 @@ var Script;
             Script.cubes = Base.getChildrenByName("Cubes")[0];
             lines = Base.getChildrenByName("Lines")[0];
             Script.cube = Script.cubes.getChildrenByName("Cube")[j];
-            //console.log(cube);
             linestatea = lines.getChildrenByName("Line")[j].getComponent(Script.StateMachine);
             linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(Script.StateMachine);
             linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(Script.StateMachine);
@@ -263,21 +254,15 @@ var Script;
                     Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                     Base.getComponent(ƒ.ComponentAudio).play(true);
                     console.log("i did something");
-                    //check = true
                     checkPlayer1 = true;
                 }
                 else if (Script.cube.getComponent(Script.StateMachine).stateCurrent == Script.JOB.IDLE && Script.turn == "Player2") {
-                    //Player2count += 1
                     let jnum = j.toString();
                     let message = "cubenumplayerb" + jnum;
-                    //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
                     Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
                     Base.getComponent(ƒ.ComponentAudio).play(true);
-                    //message = "count" + Player2count
-                    //client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     console.log("i did something");
-                    //check = true
                     checkPlayer2 = true;
                 }
             }
@@ -305,10 +290,8 @@ var Script;
 (function (Script) {
     var ƒ = FudgeCore;
     var ƒAid = FudgeAid;
-    //import * as Mongo from "mongodb";
     let graph;
     let lines;
-    let cubes;
     Script.turn = "Player1";
     let Base;
     let linestate;
@@ -374,8 +357,6 @@ var Script;
             this.update = (_event) => {
                 graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
                 let i = 0;
-                let point = false;
-                //console.log(Player)
                 if (Script.turn == Script.Player) {
                     switch (Script.Player) {
                         case "Player1":
@@ -408,9 +389,7 @@ var Script;
                                 }
                                 else if (linestate.stateCurrent != JOB.PLAYER1 && linestate.stateCurrent != JOB.PLAYER2 && linestate.stateCurrent != JOB.IDLE) {
                                     Script.line.getComponent(StateMachine).transit(JOB.IDLE);
-                                    //break
                                 }
-                                //console.log(line.getComponent(StateMachine).stateCurrent)
                             }
                             Script.check = false;
                             this.act();
@@ -446,7 +425,6 @@ var Script;
         }
         static async actHoverd1(_machine) {
             _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(0, 255, 0, 255);
-            //console.log()
         }
         static async actHoverd2(_machine) {
             _machine.node.getComponent(ƒ.ComponentMaterial).clrPrimary.setBytesRGBA(255, 0, 0, 255);

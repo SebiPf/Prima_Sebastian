@@ -5,14 +5,11 @@ html, body {
   height: 100%;
  overflow: hidden;
 }
-
 dialog { 
   position: absolute;
   top: 40%;
   text-align: center; 
-  
 }
-
 canvas.fullscreen { 
   width: 100vw; 
   height: 100vh; 
@@ -27,13 +24,19 @@ div#Hud {
   background-color: transparent;
   opacity: 100;
   border-radius: 5px;
-  
 }
 
 .test{
   width:15%;
   text-align:center;
-  color: white;
+  color: green;
+  background-color: transparent;
+  border: none;
+}
+.test1{
+  width:15%;
+  text-align:center;
+  color: red;
   background-color: transparent;
   border: none;
 }

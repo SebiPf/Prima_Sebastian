@@ -172,15 +172,14 @@ var Script;
                 let num = message.content.message.match(/\d+/)[0];
                 console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
-                //Player = "Player2"
-                //Player = "Player1"
+                this.act;
             }
             else if (message.content.message.includes("linenumplayerb")) {
                 let num = message.content.message.match(/\d+/)[0];
                 console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
             }
-            else if (message.content.message.includes("PLAYER")) {
+            else if (message.content.message.includes("Player")) {
                 Script.turn = message.content.message;
             }
             else if (message.content.message.includes("count")) {
@@ -239,6 +238,8 @@ var Script;
                         let message = inum;
                         message = "linenumplayera" + inum;
                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                        message = "Player2";
+                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     }
                 }
             case "Player2":
@@ -250,6 +251,8 @@ var Script;
                         let inum = i.toString();
                         let message = inum;
                         message = "linenumplayerb" + inum;
+                        Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+                        message = "Player1";
                         Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     }
                 }

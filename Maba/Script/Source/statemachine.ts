@@ -32,6 +32,8 @@ namespace Script {
             let message = inum
             message = "linenumplayera" + inum
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+            message = "Player2"
+            client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           }
         }
       case "Player2":
@@ -43,6 +45,8 @@ namespace Script {
             let inum = i.toString();
             let message = inum
             message = "linenumplayerb" + inum
+            client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+            message = "Player1"
             client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           }
         }
@@ -132,8 +136,7 @@ namespace Script {
               line.getComponent(StateMachine).transit(JOB.IDLE)
             }
           }
-          
-          
+
             point = false
             for (j = 0; j < 64; j++) {
               let x = 0

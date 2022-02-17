@@ -113,15 +113,14 @@ namespace Script {
         let num = message.content.message.match(/\d+/)[0];
         console.log("num: " + num)
         lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
-        //Player = "Player2"
-        //Player = "Player1"
+        this.act;
       }
       else if (message.content.message.includes("linenumplayerb")) {
         let num = message.content.message.match(/\d+/)[0];
         console.log("num: " + num)
         lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
       }
-      else if (message.content.message.includes("PLAYER")) {
+      else if (message.content.message.includes("Player")) {
         turn = message.content.message
       }
       else if (message.content.message.includes("count")) {

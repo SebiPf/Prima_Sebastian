@@ -34,10 +34,12 @@ declare namespace Script {
     function test(_event: Event): Promise<void>;
     function start(_event: Event): Promise<void>;
     function hndPointerMove(_event: ƒ.EventPointer): void;
+    function Checkpoint(): Promise<boolean>;
 }
 declare namespace Script {
     import ƒAid = FudgeAid;
     let turn: String;
+    let check: boolean;
     let col: boolean;
     enum JOB {
         IDLE = 0,

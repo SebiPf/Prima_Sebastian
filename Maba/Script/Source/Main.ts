@@ -16,6 +16,12 @@ namespace Script {
   export let Player1count = 0
   export let Player2count = 0
   export let Player = "Player1"
+
+  let linestatea: StateMachine
+  let linestateb: StateMachine
+  let linestatec: StateMachine
+  let linestated: StateMachine
+  let j: number = 0
   let Base: ƒ.Node
   let lines: ƒ.Node
   import ƒClient = FudgeNet.FudgeClient;
@@ -106,7 +112,7 @@ namespace Script {
     let message = JSON.parse(_event.data);
     Base = graph.getChildrenByName("Base")[0]
     lines = Base.getChildrenByName("Lines")[0]
-    
+
     if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
       console.log("Player received message " + message.content.message)
       if (message.content.message.includes("linenumplayera")) {
@@ -127,18 +133,99 @@ namespace Script {
         let num = message.content.message.match(/\d+/)[0];
         Player1count = num
       }
-      else if (message.content.message.includes("cubenumPlayera")) {
+      else if (message.content.message.includes("cubenumplayera")) {
         let num = message.content.message.match(/\d+/)[0];
         cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
         Player1count += 1
       }
-      else if (message.content.message.includes("cubenumPlayerb")) {
+      else if (message.content.message.includes("cubenumplayerb")) {
         let num = message.content.message.match(/\d+/)[0];
         cubes.getChildrenByName('Cube')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
         Player2count += 1
       }
     }
     else {
+
+    }
+  }
+  export async function Checkpoint() {
+    console.log("ich werde aufgerufen")
+    for (j = 0; j < 64; j++) {
+      let x = 0
+      let y = 0
+      if (j < 8) {
+        x = 72
+        y = 73
+      }
+      else if (j < 16 && j > 7) {
+        x = 73
+        y = 74
+      }
+      else if (j < 24 && j > 15) {
+        x = 74
+        y = 75
+      }
+      else if (j < 32 && j > 23) {
+        x = 75
+        y = 76
+      }
+      else if (j < 40 && j > 31) {
+        x = 76
+        y = 77
+      }
+      else if (j < 48 && j > 39) {
+        x = 77
+        y = 78
+      }
+      else if (j < 56 && j > 47) {
+        x = 78
+        y = 79
+      }
+      else if (j < 64 && j > 55) {
+        x = 79
+        y = 80
+      }
+
+      Base = graph.getChildrenByName("Base")[0]
+      cubes = Base.getChildrenByName("Cubes")[0]
+      lines = Base.getChildrenByName("Lines")[0]
+      cube = cubes.getChildrenByName("Cube")[j]
+      //console.log(cube);
+      linestatea = lines.getChildrenByName("Line")[j].getComponent(StateMachine);
+      linestateb = lines.getChildrenByName("Line")[(j + x)].getComponent(StateMachine);
+      linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
+      linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
+
+      if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
+        console.log("should be a point at this point");
+        if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
+          let jnum = j.toString();
+          let message = "cubenumplayera" + jnum
+          client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          Base.getComponent(ƒ.ComponentAudio).play(true)
+          console.log("i did something");
+          check = true
+          return check
+        }
+        else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
+          //Player2count += 1
+          let jnum = j.toString();
+          let message = "cubenumplayerb" + jnum
+          //cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
+          client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          Base.getComponent(ƒ.ComponentAudio).play(true)
+          //message = "count" + Player2count
+          //client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
+          console.log("i did something");
+          check = true
+          return check
+        }
+        check = false
+        return check
+      } else {
+        check = false
+        return check
+      }
 
     }
   }

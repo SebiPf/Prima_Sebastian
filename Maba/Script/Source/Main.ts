@@ -104,7 +104,7 @@ namespace Script {
 
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-
+    console.log("Player received message")
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
           if(message.content.message.includes("linenumplayera")){
             let num = message.content.message.match(/\d+/)[0];

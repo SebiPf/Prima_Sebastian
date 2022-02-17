@@ -103,7 +103,7 @@ namespace Script {
       let status = document.getElementById("status");
       status.hidden = true
     }
-    //console.log(Player)
+    console.log(turn)
     //console.log(Player1count)
     viewport.draw();
     ƒ.AudioManager.default.update();

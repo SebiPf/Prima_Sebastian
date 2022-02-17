@@ -92,7 +92,7 @@ namespace Script {
       let status = document.getElementById("status");
       status.hidden = true
     }
-    console.log(turn)
+    //console.log(turn)
     //console.log(Player1count)
     viewport.draw();
     ƒ.AudioManager.default.update();
@@ -109,10 +109,12 @@ namespace Script {
           console.log("Player received message")
           if(message.content.message.includes("linenumplayera")){
             let num = message.content.message.match(/\d+/)[0];
+            console.log(num)
             lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
           }
-          else if(message.content.message.includes("linenumPlayerb")){
+          else if(message.content.message.includes("linenumplayerb")){
             let num = message.content.message.match(/\d+/)[0];
+            console.log(num)
             lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
           }
           else if(message.content.message.includes("PLAYER")){

@@ -152,7 +152,7 @@ var Script;
             let status = document.getElementById("status");
             status.hidden = true;
         }
-        console.log(Script.turn);
+        //console.log(turn)
         //console.log(Player1count)
         viewport.draw();
         ƒ.AudioManager.default.update();
@@ -168,10 +168,12 @@ var Script;
             console.log("Player received message");
             if (message.content.message.includes("linenumplayera")) {
                 let num = message.content.message.match(/\d+/)[0];
+                console.log(num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
             }
-            else if (message.content.message.includes("linenumPlayerb")) {
+            else if (message.content.message.includes("linenumplayerb")) {
                 let num = message.content.message.match(/\d+/)[0];
+                console.log(num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
             }
             else if (message.content.message.includes("PLAYER")) {

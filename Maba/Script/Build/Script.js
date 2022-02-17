@@ -168,12 +168,12 @@ var Script;
             console.log("Player received message");
             if (message.content.message.includes("linenumplayera")) {
                 let num = message.content.message.match(/\d+/)[0];
-                console.log(num);
+                console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
             }
             else if (message.content.message.includes("linenumplayerb")) {
                 let num = message.content.message.match(/\d+/)[0];
-                console.log(num);
+                console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
             }
             else if (message.content.message.includes("PLAYER")) {

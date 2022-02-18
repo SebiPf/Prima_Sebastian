@@ -9,7 +9,7 @@ Now for the Game. This is a 2 player game and the gole is to get as many points 
 If you score a Point you get an additional turn.
 | Nr | Criterion       | Explanation  
 |---:|-------------------|---------------------------------------------------------------------------------------------------------------------|
-|  0 | Units and Positions | May 0 in in the middle of the map. This makes creaking symetric maps easier                                    |
+|  0 | Units and Positions | My 0 in in the middle of the map. This makes creating symetric maps easier.                                    |
 |  1 | Hierarchy         | My first node is only used for sound since its a 2d game and that way the sound comes from the middle of the screen. All other elements a seperated into to groups lines and cubes what makes it easy to get all em´lements by calling all childrends of fpr example lines.                                                 |
 |  2 | Editor            | To build small prototypes the editor is easier because you can see what you added to a node.If it get bigger code is better since you can build complex strucktures more easyliy.(My struckture would have been easyier to buld by code than by hand)                                    |
 |  3 | Scriptcomponents  | maybe add sound to scfript component                                |

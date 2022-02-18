@@ -6,9 +6,8 @@ namespace Script {
     // Register the script as component for use in the editor via drag&drop
     public static readonly iSubclass: number = ƒ.Component.registerSubclass(CustomComponentScript);
     // Properties may be mutated by users in the editor via the automatically created user interface
-    public message: string = "CustomComponentScript added to ";
-
-
+    //public message: string = "CustomComponentScript added to ";
+    public played: boolean = false
     constructor() {
       super();
 
@@ -26,7 +25,8 @@ namespace Script {
     public hndEvent = (_event: Event): void => {
       switch (_event.type) {
         case ƒ.EVENT.COMPONENT_ADD:
-          ƒ.Debug.log(this.message, this.node);
+          //ƒ.Debug.log(this.message, this.node);
+          ƒ.Loop.addEventListener(ƒ.EVENT.LOOP_FRAME, this.update);
           break;
         case ƒ.EVENT.COMPONENT_REMOVE:
           this.removeEventListener(ƒ.EVENT.COMPONENT_ADD, this.hndEvent);
@@ -37,7 +37,15 @@ namespace Script {
           break;
       }
     }
-
+    public update = (_event: Event): void => {
+      //console.log("I was called")
+      if((this.node.getComponent(StateMachine).stateCurrent == JOB.PLAYER1 || this.node.getComponent(StateMachine).stateCurrent == JOB.PLAYER2) && this.played == false){
+        let graph = <ƒ.Graph>ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
+        let Base = graph.getChildrenByName("Base")[0]
+        Base.getComponent(ƒ.ComponentAudio).play(true)
+        this.played = true
+      }
+    }
     // protected reduceMutator(_mutator: ƒ.Mutator): void {
     //   // delete properties that should not be mutated
     //   // undefined properties and private fields (#) will not be included by default

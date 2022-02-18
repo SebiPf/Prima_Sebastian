@@ -65,6 +65,7 @@ namespace Script {
     for (let i = 0; i < 64; i++) {
       cube = cubes.getChildrenByName("Cube")[i];
       cube.addComponent(new StateMachine());
+      cube.addComponent(new CustomComponentScript())
     }
     graph.addComponent(new ƒ.ComponentAudioListener())
     ƒ.AudioManager.default.listenTo(graph)
@@ -103,16 +104,13 @@ namespace Script {
     Base = graph.getChildrenByName("Base")[0]
     lines = Base.getChildrenByName("Lines")[0]
     if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-      console.log("Player received message " + message.content.message)
       if (message.content.message.includes("linenumplayera")) {
         let num = message.content.message.match(/\d+/)[0];
-        console.log("num: " + num)
         lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
         this.act;
       }
       else if (message.content.message.includes("linenumplayerb")) {
         let num = message.content.message.match(/\d+/)[0];
-        console.log("num: " + num)
         lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
       }
       else if (message.content.message.includes("Player")) {
@@ -137,7 +135,6 @@ namespace Script {
     }
   }
   export async function Checkpoint() {
-    console.log("ich werde aufgerufen")
     let message: String
     let checkPlayer1: boolean = false
     let checkPlayer2: boolean = false
@@ -185,14 +182,11 @@ namespace Script {
       linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(StateMachine);
       linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(StateMachine);
       if ((linestatea.stateCurrent == JOB.PLAYER1 || linestatea.stateCurrent == JOB.PLAYER2) && (linestateb.stateCurrent == JOB.PLAYER1 || linestateb.stateCurrent == JOB.PLAYER2) && (linestatec.stateCurrent == JOB.PLAYER1 || linestatec.stateCurrent == JOB.PLAYER2) && (linestated.stateCurrent == JOB.PLAYER1 || linestated.stateCurrent == JOB.PLAYER2)) {
-        console.log("should be a point at this point");
         if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player1") {
           let jnum = j.toString();
           let message = "cubenumplayera" + jnum
           client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER1)
-          Base.getComponent(ƒ.ComponentAudio).play(true)
-          console.log("i did something");
           checkPlayer1 = true
         }
         else if (cube.getComponent(StateMachine).stateCurrent == JOB.IDLE && turn == "Player2") {
@@ -200,13 +194,10 @@ namespace Script {
           let message = "cubenumplayerb" + jnum
           client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
           cubes.getChildrenByName('Cube')[j].getComponent(StateMachine).transit(JOB.PLAYER2)
-          Base.getComponent(ƒ.ComponentAudio).play(true)
-          console.log("i did something");
           checkPlayer2 = true
         }
       }
       else {
-        console.log("i change the turn");
         if (turn == "Player1") {
           message = "Player2"
         }

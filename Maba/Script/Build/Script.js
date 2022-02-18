@@ -7,12 +7,14 @@ var Script;
         constructor() {
             super();
             // Properties may be mutated by users in the editor via the automatically created user interface
-            this.message = "CustomComponentScript added to ";
+            //public message: string = "CustomComponentScript added to ";
+            this.played = false;
             // Activate the functions of this component as response to events
             this.hndEvent = (_event) => {
                 switch (_event.type) {
                     case "componentAdd" /* COMPONENT_ADD */:
-                        ƒ.Debug.log(this.message, this.node);
+                        //ƒ.Debug.log(this.message, this.node);
+                        ƒ.Loop.addEventListener("loopFrame" /* LOOP_FRAME */, this.update);
                         break;
                     case "componentRemove" /* COMPONENT_REMOVE */:
                         this.removeEventListener("componentAdd" /* COMPONENT_ADD */, this.hndEvent);
@@ -21,6 +23,15 @@ var Script;
                     case "nodeDeserialized" /* NODE_DESERIALIZED */:
                         // if deserialized the node is now fully reconstructed and access to all its components and children is possible
                         break;
+                }
+            };
+            this.update = (_event) => {
+                //console.log("I was called")
+                if ((this.node.getComponent(Script.StateMachine).stateCurrent == Script.JOB.PLAYER1 || this.node.getComponent(Script.StateMachine).stateCurrent == Script.JOB.PLAYER2) && this.played == false) {
+                    let graph = ƒ.Project.resources["Graph|2022-01-11T11:12:36.120Z|06820"];
+                    let Base = graph.getChildrenByName("Base")[0];
+                    Base.getComponent(ƒ.ComponentAudio).play(true);
+                    this.played = true;
                 }
             };
             // Don't start when running in editor
@@ -124,6 +135,7 @@ var Script;
         for (let i = 0; i < 64; i++) {
             Script.cube = Script.cubes.getChildrenByName("Cube")[i];
             Script.cube.addComponent(new Script.StateMachine());
+            Script.cube.addComponent(new Script.CustomComponentScript());
         }
         graph.addComponent(new ƒ.ComponentAudioListener());
         ƒ.AudioManager.default.listenTo(graph);
@@ -164,16 +176,13 @@ var Script;
         Base = graph.getChildrenByName("Base")[0];
         lines = Base.getChildrenByName("Lines")[0];
         if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT) {
-            console.log("Player received message " + message.content.message);
             if (message.content.message.includes("linenumplayera")) {
                 let num = message.content.message.match(/\d+/)[0];
-                console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
                 this.act;
             }
             else if (message.content.message.includes("linenumplayerb")) {
                 let num = message.content.message.match(/\d+/)[0];
-                console.log("num: " + num);
                 lines.getChildrenByName('Line')[num].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
             }
             else if (message.content.message.includes("Player")) {
@@ -198,7 +207,6 @@ var Script;
         }
     }
     async function Checkpoint() {
-        console.log("ich werde aufgerufen");
         let message;
         let checkPlayer1 = false;
         let checkPlayer2 = false;
@@ -246,14 +254,11 @@ var Script;
             linestatec = lines.getChildrenByName("Line")[(j + y)].getComponent(Script.StateMachine);
             linestated = lines.getChildrenByName("Line")[(j + 8)].getComponent(Script.StateMachine);
             if ((linestatea.stateCurrent == Script.JOB.PLAYER1 || linestatea.stateCurrent == Script.JOB.PLAYER2) && (linestateb.stateCurrent == Script.JOB.PLAYER1 || linestateb.stateCurrent == Script.JOB.PLAYER2) && (linestatec.stateCurrent == Script.JOB.PLAYER1 || linestatec.stateCurrent == Script.JOB.PLAYER2) && (linestated.stateCurrent == Script.JOB.PLAYER1 || linestated.stateCurrent == Script.JOB.PLAYER2)) {
-                console.log("should be a point at this point");
                 if (Script.cube.getComponent(Script.StateMachine).stateCurrent == Script.JOB.IDLE && Script.turn == "Player1") {
                     let jnum = j.toString();
                     let message = "cubenumplayera" + jnum;
                     Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER1);
-                    Base.getComponent(ƒ.ComponentAudio).play(true);
-                    console.log("i did something");
                     checkPlayer1 = true;
                 }
                 else if (Script.cube.getComponent(Script.StateMachine).stateCurrent == Script.JOB.IDLE && Script.turn == "Player2") {
@@ -261,13 +266,10 @@ var Script;
                     let message = "cubenumplayerb" + jnum;
                     Script.client.dispatch({ route: "ws" ? FudgeNet.ROUTE.VIA_SERVER : undefined, content: { message } });
                     Script.cubes.getChildrenByName('Cube')[j].getComponent(Script.StateMachine).transit(Script.JOB.PLAYER2);
-                    Base.getComponent(ƒ.ComponentAudio).play(true);
-                    console.log("i did something");
                     checkPlayer2 = true;
                 }
             }
             else {
-                console.log("i change the turn");
                 if (Script.turn == "Player1") {
                     message = "Player2";
                 }

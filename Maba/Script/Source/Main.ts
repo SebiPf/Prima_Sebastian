@@ -101,17 +101,17 @@ namespace Script {
   }
   async function receiveMessage(_event) {
     let message = JSON.parse(_event.data);
-    //Base = graph.getChildrenByName("Base")[0]
-    //lines = Base.getChildrenByName('Line')[0]
+    Base = graph.getChildrenByName("Base")[0]
+    lines = Base.getChildrenByName("Lines")[0]
     
     if (message.command != FudgeNet.COMMAND.SERVER_HEARTBEAT && message.command != FudgeNet.COMMAND.CLIENT_HEARTBEAT && message.command != FudgeNet.COMMAND.ASSIGN_ID) {
       let message = JSON.parse(_event.data);
       if (message.content.message.includes("linenumplayera")) {
         let num = message.content.message.match(/\d+/)[0];
-        lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER1)
+        lines.getChildrenByName("Line")[num].getComponent(StateMachine).transit(JOB.PLAYER1)
         this.act;
       }
-      else if (message.content.message.content("linenumplayerb")) {
+      else if (message.content.message.includes("linenumplayerb")) {
         let num = message.content.message.match(/\d+/)[0];
         lines.getChildrenByName('Line')[num].getComponent(StateMachine).transit(JOB.PLAYER2)
       }
